@@ -24,10 +24,14 @@ const corsOptions: CorsOptions = {
         }
     },
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+    optionsSuccessStatus: 200,
 };
 app.use(cors<Request>(corsOptions));
 
 // connecting to databseconnectDB();
+connectDB();
 
 // routes
 app.use("/v1/auth", authRouter);

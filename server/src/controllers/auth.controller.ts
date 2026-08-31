@@ -41,7 +41,8 @@ export async function handleRegister(req: Request, res: Response) {
 
 export async function handleLogin(req: Request, res: Response) {
     try {
-        const { email, password } = req.body;
+        const data = req.body;
+        const { email, password, rememberme } = data;
 
         const user = await User.findOne({ email: email });
         if (!user) {
@@ -64,7 +65,7 @@ export async function handleLogin(req: Request, res: Response) {
         };
 
         const token = jwt.sign(payload, process.env.JWT_SECRET_KEY as string, {
-            expiresIn: "1d",
+            expiresIn: rememberme ? "7d" : "1d",
         });
 
         res.cookie("Token", token, { maxAge: 24 * 60 * 60 * 1000 });

@@ -26,8 +26,13 @@ function InboxView() {
     }
 
     return (
-        <div className="w-full flex items-center justify-center p-4">
+        <div className="w-full flex flex-col items-center justify-center p-4 gap-2">
             <TaskTemplate menuTitle={"Inbox"} userTasks={userTasks} />
+            <div className="w-full max-w-3xl flex items-center justify-start px-2">
+                <button className="text-sm text-text-grey font-medium hover:cursor-pointer hover:bg-hover py-1 px-2 rounded-md active:scale-[0.96]">
+                    + Add Task
+                </button>
+            </div>
         </div>
     );
 }

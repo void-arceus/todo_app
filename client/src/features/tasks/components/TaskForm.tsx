@@ -30,7 +30,7 @@ function TaskForm({ handleDisplayTaskForm }: ITaskFormProps) {
                         className="w-full outline-0 placeholder:text-sm text-text-grey text-sm"
                     />
                     {taskTitle.length > 0 ? (
-                        <div>
+                        <div className="w-full">
                             <input
                                 value={taskDescription}
                                 onChange={(e) =>

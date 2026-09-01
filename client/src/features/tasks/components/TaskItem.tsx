@@ -35,25 +35,27 @@ function TaskItem({ taskData }: ITaskItemProps) {
                         />
                     </button>
                 </div>
-                <div className="flex flex-col items-start justify-start">
-                    <h1 className="text-md font-medium text-text-dark">
-                        {taskData?.taskName}
-                    </h1>
-                    <p className="text-xs font-regular text-text-grey">
-                        {taskData?.taskNote}
-                    </p>
+                <div className="w-full flex items-center justify-between">
+                    <div className="w-full">
+                        <h1 className="text-md font-medium text-text-dark">
+                            {taskData?.taskName}
+                        </h1>
+                        <p className="text-xs font-regular text-text-grey">
+                            {taskData?.taskNote}
+                        </p>
+                    </div>
+                    <div className="w-full flex items-center justify-end pl-2 gap-3">
+                        <button className="hover:cursor-pointer">
+                            <img src={editIcon} className="h-4 w-4" />
+                        </button>
+                        <button className="hover:cursor-pointer">
+                            <img src={commentIcon} className="h-4 w-4" />
+                        </button>
+                        <button className="hover:cursor-pointer">
+                            <img src={deleteIcon} className="h-4 w-4" />
+                        </button>
+                    </div>
                 </div>
-            </div>
-            <div className="w-full flex items-center justify-end gap-3">
-                <button className="hover:cursor-pointer">
-                    <img src={editIcon} className="h-4 w-4" />
-                </button>
-                <button className="hover:cursor-pointer">
-                    <img src={commentIcon} className="h-4 w-4" />
-                </button>
-                <button className="hover:cursor-pointer">
-                    <img src={deleteIcon} className="h-4 w-4" />
-                </button>
             </div>
         </div>
     );

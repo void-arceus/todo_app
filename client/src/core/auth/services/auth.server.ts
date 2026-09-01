@@ -15,7 +15,6 @@ export async function handleLogin(data: LoginInputs) {
 export async function handleCheckUser() {
     try {
         const res = await axios.get(`${BASE_URL}/v1/auth/me`);
-        console.log("Result:", res);
         return res.data;
     } catch (error: any) {
         throw new Error(error);

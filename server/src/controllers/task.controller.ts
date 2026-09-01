@@ -32,7 +32,7 @@ export async function handleGetTasks(req: Request, res: Response) {
         return res.status(200).json({
             status: true,
             message: "Tasks fetched successfully",
-            tasks: tasks,
+            data: tasks,
         });
     } catch (errror: any) {
         return res.status(500).json({

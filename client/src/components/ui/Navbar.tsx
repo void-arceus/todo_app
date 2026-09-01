@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import task_logo from "../assets/task_logo.png";
+import task_logo from "../../assets/task_logo.png";
 
 import { useAuth } from "../../core/auth/context/AuthContext";
 
@@ -21,8 +21,8 @@ function Navbar() {
                     <div className="flex items-center gap-4">
                         <div>
                             <button
-                                onClick={() => navigate("/homepage")}
-                                className=""
+                                onClick={() => navigate("/dashboard")}
+                                className="bg-button-primary hover:bg-button-hover text-text-light px-4 py-1.5 rounded-xs hover:cursor-pointer hover:shadow-md active:scale-[0.98] transition-scale duration-100 ease-in"
                             >
                                 My ToDo
                             </button>

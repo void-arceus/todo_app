@@ -29,7 +29,7 @@ function Login() {
             const res = await handleLogin(data);
             handleSetUserData(res.data);
             handleLoggedIn(true);
-            navigate("/homepage");
+            navigate("/dashboard");
         } catch (error: any) {
             handleLoggedIn(false);
             throw new Error(error);

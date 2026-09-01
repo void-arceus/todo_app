@@ -1,41 +1,39 @@
 import { useForm, type SubmitHandler } from "react-hook-form";
-import { useAuth } from "../Context/AuthContext";
+import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { handleLogin } from "../services/auth.server";
 
 const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-console.log(typeof regex);
 
-type Inputs = {
+export interface LoginInputs {
     email: string;
     password: string;
     rememberme: boolean;
-};
+}
 
 function Login() {
     const {
         register,
         handleSubmit,
         formState: { errors, isSubmitting },
-    } = useForm<Inputs>({
+    } = useForm<LoginInputs>({
         defaultValues: {
             rememberme: false,
         },
     });
-    const handleLoggedIn = useAuth();
+    const { handleLoggedIn, handleSetUserData } = useAuth();
     const navigate = useNavigate();
 
-    const onSubmit: SubmitHandler<Inputs> = async (data) => {
-        await new Promise((resolve, reject) => {
-            try {
-                setTimeout(() => {
-                    resolve("foo");
-                }, 1000);
-            } catch (error: any) {
-                reject("foo");
-            }
-        });
-        console.log("Logged in temporarily...");
-        console.log(data);
+    const onSubmit: SubmitHandler<LoginInputs> = async (data) => {
+        try {
+            const res = await handleLogin(data);
+            handleSetUserData(res.data);
+            handleLoggedIn(true);
+            navigate("/homepage");
+        } catch (error: any) {
+            handleLoggedIn(false);
+            throw new Error(error);
+        }
     };
 
     return (

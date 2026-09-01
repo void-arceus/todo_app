@@ -101,3 +101,28 @@ export async function handleLogOut(req: Request, res: Response) {
         });
     }
 }
+
+export async function handleMe(req: Request, res: Response) {
+    try {
+        const userData = await User.findOne({ _id: req.user?.id });
+        if (!userData) {
+            return res.status(404).json({
+                status: false,
+                message: "User not found",
+            });
+        }
+        return res.status(200).json({
+            status: true,
+            message: "User is logged in",
+            data: {
+                username: userData.username,
+                email: userData.email,
+            },
+        });
+    } catch (error: any) {
+        return res.status(500).json({
+            status: false,
+            message: "Internal Server Error",
+        });
+    }
+}

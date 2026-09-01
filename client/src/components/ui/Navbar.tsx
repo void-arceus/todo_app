@@ -1,10 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import task_logo from "../assets/task_logo.png";
 
-import { useAuth } from "../Context/AuthContext";
+import { useAuth } from "../../core/auth/context/AuthContext";
 
 function Navbar() {
-    const { isLoggedIn } = useAuth();
+    const { isLoggedIn, userData } = useAuth();
     const navigate = useNavigate();
 
     return (
@@ -14,11 +14,23 @@ function Navbar() {
                     <img
                         src={task_logo}
                         alt="task_logo.png"
-                        className="remove-white-bg w-40"
+                        className="remove-white-bg h-8 w-27"
                     />
                 </div>
                 {isLoggedIn ? (
-                    <div>Display User profile in that case</div>
+                    <div className="flex items-center gap-4">
+                        <div>
+                            <button
+                                onClick={() => navigate("/homepage")}
+                                className=""
+                            >
+                                My ToDo
+                            </button>
+                        </div>
+                        <div>
+                            <p>{userData?.username}</p>
+                        </div>
+                    </div>
                 ) : (
                     <div className="flex items-center gap-4">
                         <button

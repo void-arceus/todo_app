@@ -3,13 +3,18 @@ import Tasks from "../models/task.model";
 
 export async function handleAddTask(req: Request, res: Response) {
     try {
-        const { taskName, taskNote, deadline=null, taskPriority="low" } = req.body;
+        const {
+            taskName,
+            taskNote,
+            deadline = null,
+            taskPriority = "low",
+        } = req.body;
 
         const task = await Tasks.create({
             taskName,
             taskNote,
             deadline,
-           taskPriority,
+            taskPriority,
             userId: req.user?.id,
         });
 
@@ -82,7 +87,7 @@ export async function handleUpdateTask(req: Request, res: Response) {
         const { id } = req.params;
         const data = req.body;
 
-        const update = await Tasks.findOneAndUpdate(
+        const updatedData = await Tasks.findOneAndUpdate(
             {
                 _id: id,
                 userId: req.user?.id,
@@ -92,7 +97,7 @@ export async function handleUpdateTask(req: Request, res: Response) {
             },
         );
 
-        if (!update) {
+        if (!updatedData) {
             return res.status(400).json({
                 status: false,
                 message: "Failed to Update Task",
@@ -102,6 +107,7 @@ export async function handleUpdateTask(req: Request, res: Response) {
         return res.status(200).json({
             status: true,
             message: "Task Updated Successfully",
+            data: updatedData,
         });
     } catch (error: any) {
         return res.status(500).json({

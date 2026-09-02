@@ -13,7 +13,7 @@ interface ITaskItemProps {
 
 function TaskItem({ taskData }: ITaskItemProps) {
     const [circleImage, setCircleImage] = useState<string>(emptyCircle);
-    const { deleteTask } = useTask();
+    const { deleteTask, updateTask } = useTask();
 
     return (
         <div
@@ -23,6 +23,14 @@ function TaskItem({ taskData }: ITaskItemProps) {
             <div className="w-full flex items-start justify-start gap-2">
                 <div className="h-5">
                     <button
+                        onClick={() => {
+                            const data: Partial<IUserTasks> = {
+                                isCompleted: taskData.isCompleted
+                                    ? false
+                                    : true,
+                            };
+                            updateTask(taskData?._id, data);
+                        }}
                         onMouseEnter={() => {
                             setCircleImage(emptyCircleHover);
                         }}
@@ -32,7 +40,11 @@ function TaskItem({ taskData }: ITaskItemProps) {
                         className="hover:cursor-pointer pt-1 h-5"
                     >
                         <img
-                            src={circleImage}
+                            src={
+                                taskData.isCompleted
+                                    ? emptyCircleHover
+                                    : circleImage
+                            }
                             alt="empty_circle.png"
                             className="h-5 object-fit"
                         />
@@ -40,10 +52,14 @@ function TaskItem({ taskData }: ITaskItemProps) {
                 </div>
                 <div className="w-full flex items-center justify-between">
                     <div className="w-full">
-                        <h1 className="text-sm font-regular text-text-dark">
+                        <h1
+                            className={`${taskData.isCompleted ? "text-text-grey line-through" : "text-text-dark"} text-sm font-regular`}
+                        >
                             {taskData?.taskName}
                         </h1>
-                        <p className="text-xs font-regular text-text-grey">
+                        <p
+                            className={`${taskData.isCompleted ? "line-through" : ""} text-xs font-regular text-text-grey`}
+                        >
                             {taskData?.taskNote}
                         </p>
                     </div>

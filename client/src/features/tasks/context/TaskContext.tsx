@@ -9,6 +9,7 @@ import {
     handleAddTask,
     handleDeleteTask,
     handleGetTasks,
+    handleUpdateTask,
 } from "../services/tasks.services";
 
 export interface IUserTasks {
@@ -22,7 +23,7 @@ export interface IUserTasks {
 interface ITaskContextInterface {
     userTasks: IUserTasks[];
     deleteTask: (id: string) => void;
-    updateTask: (id: string, data: IUserTasks) => void;
+    updateTask: (id: string, data: Partial<IUserTasks>) => void;
     addNewTask: (data: IUserTasks) => void;
 }
 
@@ -49,8 +50,10 @@ export function TaskProvider({ children }: ITaskProviderProp) {
         }
     }
 
-    async function updateTask(id: string, data: IUserTasks) {
+    async function updateTask(id: string, data: Partial<IUserTasks>) {
         try {
+            const res = await handleUpdateTask(id, data);
+            getTasks();
         } catch (error: any) {
             throw new Error(error);
         }
@@ -68,7 +71,12 @@ export function TaskProvider({ children }: ITaskProviderProp) {
     async function getTasks() {
         try {
             const res = await handleGetTasks();
-            setUserTasks(res.data);
+            setUserTasks(
+                res.data.sort(
+                    (a: IUserTasks, b: IUserTasks) =>
+                        Number(a.isCompleted) - Number(b.isCompleted),
+                ),
+            );
         } catch (error: any) {
             throw new Error(error);
         }

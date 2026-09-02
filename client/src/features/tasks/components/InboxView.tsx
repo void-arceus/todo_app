@@ -7,7 +7,7 @@ function InboxView() {
     const [taskDescription, setTaskDescription] = useState<string>("");
 
     return (
-        <div className="w-full flex flex-col items-center justify-center p-4 gap-2">
+        <div className="w-full max-w-3xl flex flex-col items-center justify-center p-4 gap-2">
             <TaskTemplate menuTitle={"Inbox"} />
             <div className="w-full max-w-3xl flex items-center justify-start">
                 {showInputBox ? (

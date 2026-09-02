@@ -10,23 +10,34 @@ import filterIcon from "../../../assets/sidebar/filter.png";
 import filterIconActive from "../../../assets/sidebar/filter_active.png";
 import reportingIcon from "../../../assets/sidebar/report.png";
 import reportingIconActive from "../../../assets/sidebar/report_active.png";
+import sidebarIcon from "../../../assets/sidebar/sidebar.png";
 import { useAuth } from "../../../core/auth/context/AuthContext";
 
 interface ISidebarProps {
     activeSideMenu: string;
     handleActiveSideMenu: (val: string) => void;
     handleDisplayTaskForm: () => void;
+    handleShowSideBar: () => void;
+    isOpen: boolean;
 }
 
 function Sidebar({
     activeSideMenu,
     handleActiveSideMenu,
     handleDisplayTaskForm,
+    handleShowSideBar,
+    isOpen,
 }: ISidebarProps) {
     const { userData } = useAuth();
 
     return (
-        <main className="h-screen w-full max-w-xs border-r border-border-primary bg-bg-primary shadow-sm flex flex-col">
+        <main
+            className={`fixed top-0 left-0 z-40 h-screen w-full max-w-xs border-r border-border-primary bg-bg-primary shadow-sm flex flex-col transform transition-transform duration-300 ease-in-out ${
+                isOpen
+                    ? "translate-x-0 opacity-100"
+                    : "opacity-50 -translate-x-full"
+            }`}
+        >
             <div className="p-2 flex items-center justify-between">
                 <div className="flex items-center gap-2 px-2 py-1 hover:bg-hover rounded-md active:scale-[0.96]">
                     <span className="bg-black/10 flex items-center justify-center border border-border-hover h-6 w-6 rounded-full text-bold select-none">
@@ -36,7 +47,18 @@ function Sidebar({
                         {userData?.username}
                     </h1>
                 </div>
-                <div className="text-xs font-medium">x</div>
+                <div className="text-xs font-medium">
+                    <button
+                        onClick={() => handleShowSideBar()}
+                        className="hover:cursor-pointer"
+                    >
+                        <img
+                            src={sidebarIcon}
+                            alt="sidebar.png"
+                            className="h-5"
+                        />
+                    </button>
+                </div>
             </div>
             <div className="w-full p-1.5">
                 <button

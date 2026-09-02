@@ -29,7 +29,7 @@ function TaskItem({ taskData }: ITaskItemProps) {
                         onMouseLeave={() => {
                             setCircleImage(emptyCircle);
                         }}
-                        className="hover:cursor-pointer pt-1.5 h-5"
+                        className="hover:cursor-pointer pt-1 h-5"
                     >
                         <img
                             src={circleImage}

@@ -1,8 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Sidebar from "../features/dashboard/components/Sidebar";
 import MyTodo from "../features/dashboard/components/MyTodo";
 import TaskForm from "../features/tasks/components/TaskForm";
-import { handleGetTasks } from "../features/tasks/services/tasks.services";
 
 function DashboardPage() {
     const [activeSideMenu, setActiveSideMenu] = useState<string>("inbox");

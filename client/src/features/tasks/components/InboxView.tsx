@@ -1,37 +1,59 @@
 import TaskTemplate from "./TaskTemplate";
-import { handleGetTasks } from "../services/tasks.services";
-import { useState, useEffect } from "react";
-
-export interface IUserTasks {
-    _id: string;
-    taskName: string;
-    taskNote: string;
-    taskPriority: string;
-    isCompleted: boolean;
-}
+import { useState } from "react";
 
 function InboxView() {
-    const [userTasks, setUserTasks] = useState<IUserTasks[]>([]);
-
-    useEffect(() => {
-        getUserTasks();
-    }, []);
-    async function getUserTasks() {
-        try {
-            const res = await handleGetTasks();
-            setUserTasks(res.data as IUserTasks[]);
-        } catch (error: any) {
-            throw new Error(error);
-        }
-    }
+    const [showInputBox, setShowInputBox] = useState<boolean>(false);
+    const [taskTitle, setTaskTitle] = useState<string>("");
+    const [taskDescription, setTaskDescription] = useState<string>("");
 
     return (
         <div className="w-full flex flex-col items-center justify-center p-4 gap-2">
-            <TaskTemplate menuTitle={"Inbox"} userTasks={userTasks} />
-            <div className="w-full max-w-3xl flex items-center justify-start px-2">
-                <button className="text-sm text-text-grey font-medium hover:cursor-pointer hover:bg-hover py-1 px-2 rounded-md active:scale-[0.96]">
-                    + Add Task
-                </button>
+            <TaskTemplate menuTitle={"Inbox"} />
+            <div className="w-full max-w-3xl flex items-center justify-start">
+                {showInputBox ? (
+                    <div className="w-full border border-border-primary p-3 rounded-xl flex flex-col items-start justify-center gap-2 shadow-md hover:border-border-hover">
+                        <div className="w-full">
+                            <input
+                                value={taskTitle}
+                                onChange={(e) => setTaskTitle(e.target.value)}
+                                placeholder="TaskName"
+                                className="w-full text-sm text-text-grey outline-0 text-medium"
+                            />
+                            {taskTitle.length > 0 && taskTitle.trim() !== "" ? (
+                                <input
+                                    value={taskDescription}
+                                    onChange={(e) =>
+                                        setTaskDescription(e.target.value)
+                                    }
+                                    placeholder="Note"
+                                    className="w-full outline-0 text-xs text-text-grey"
+                                />
+                            ) : null}
+                        </div>
+                        <div className="w-full flex items-center justify-end gap-3">
+                            <button
+                                onClick={() => {
+                                    setShowInputBox(false);
+                                }}
+                                className="text-xs font-medium text-text-grey hover:cursor-pointer"
+                            >
+                                Cancel
+                            </button>
+                            <button className="text-sm font-medium text-text-light bg-button-primary hover:bg-button-hover px-3.5 py-1.5 rounded-sm cursor-pointer hover:shadow-md active:scale-[0.96]">
+                                Add
+                            </button>
+                        </div>
+                    </div>
+                ) : (
+                    <button
+                        onClick={() => {
+                            setShowInputBox(true);
+                        }}
+                        className="text-xs text-text-grey font-medium hover:cursor-pointer hover:text-text-dark py-2 px-3 rounded-md"
+                    >
+                        + Add Task
+                    </button>
+                )}
             </div>
         </div>
     );

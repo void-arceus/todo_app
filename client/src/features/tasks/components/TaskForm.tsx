@@ -1,14 +1,35 @@
 import { useState } from "react";
 import submitIcon from "../../../assets/icons/up_icon.png";
 import cancelIcon from "../../../assets/icons/close_icon.png";
+import { useTask, type IUserTasks } from "../context/TaskContext";
 
 interface ITaskFormProps {
     handleDisplayTaskForm: () => void;
 }
 
+export interface ITaskInput {
+    taskName: string;
+    taskNote: string;
+}
+
 function TaskForm({ handleDisplayTaskForm }: ITaskFormProps) {
     const [taskTitle, setTaskTitle] = useState<string>("");
     const [taskDescription, setTaskDescription] = useState<string>("");
+    const { addNewTask } = useTask();
+
+    async function addTask() {
+        const data = {
+            taskName: taskTitle,
+            taskNote: taskDescription,
+            taskPriority: "low",
+        };
+        try {
+            addNewTask(data as IUserTasks);
+            handleDisplayTaskForm();
+        } catch (error: any) {
+            throw new Error(error);
+        }
+    }
 
     return (
         <main
@@ -53,7 +74,10 @@ function TaskForm({ handleDisplayTaskForm }: ITaskFormProps) {
                             className="h-2 w-2 active:scale-[0.96] cursor-pointer"
                         />
                     </button>
-                    <button className="bg-hover p-2 border border-border-hover rounded-sm hover:bg-active active:scale-[0.96] cursor-pointer">
+                    <button
+                        onClick={() => addTask()}
+                        className="bg-hover p-2 border border-border-hover rounded-sm hover:bg-active active:scale-[0.96] cursor-pointer"
+                    >
                         <img
                             src={submitIcon}
                             alt="submitIcon"

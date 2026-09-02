@@ -24,11 +24,9 @@ const taskSchema = new Schema<iTask>({
         default: false,
     },
     deadline: {
-        required: true,
         type: Date,
     },
     taskPriority: {
-        required: true,
         type: String,
         enum: ["high", "medium", "low"],
     },

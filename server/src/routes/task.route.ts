@@ -9,7 +9,7 @@ import { authUser } from "../middleware/auth.middleware";
 
 const taskRouter: Router = express.Router();
 
-taskRouter.post("/add", authUser, handleAddTask);
+taskRouter.post("/task", authUser, handleAddTask);
 taskRouter.get("/tasks", authUser, handleGetTasks);
 taskRouter.delete("/task/:id", authUser, handleDeleteTask);
 taskRouter.patch("/task/:id", authUser, handleUpdateTask);

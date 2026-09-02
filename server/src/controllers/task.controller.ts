@@ -3,19 +3,20 @@ import Tasks from "../models/task.model";
 
 export async function handleAddTask(req: Request, res: Response) {
     try {
-        const { taskName, taskNote, deadline, taskPriority } = req.body;
+        const { taskName, taskNote, deadline=null, taskPriority="low" } = req.body;
 
-        await Tasks.create({
+        const task = await Tasks.create({
             taskName,
             taskNote,
             deadline,
-            taskPriority,
+           taskPriority,
             userId: req.user?.id,
         });
 
         return res.status(201).json({
             status: true,
             message: "Task added Successfully",
+            data: task,
         });
     } catch (error: any) {
         console.log(error);

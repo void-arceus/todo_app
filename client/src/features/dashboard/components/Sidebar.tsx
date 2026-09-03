@@ -16,6 +16,7 @@ import { useAuth } from "../../../core/auth/context/AuthContext";
 import { useState } from "react";
 import { handleLogout } from "../../tasks/services/tasks.services";
 import { useNavigate } from "react-router-dom";
+import { useToast } from "../../../core/Toaster/Context/ToastContext";
 
 interface ISidebarProps {
     activeSideMenu: string;
@@ -35,14 +36,23 @@ function Sidebar({
     const [userMenu, setUserMenu] = useState<boolean>(false);
     const { userData, handleLoggedIn, handleSetUserData } = useAuth();
     const navigate = useNavigate();
+    const { handleShowToast } = useToast();
 
     async function logout() {
         try {
             await handleLogout();
             handleSetUserData(null);
             handleLoggedIn(false);
+            handleShowToast({
+                message: "Logged Out Successfully",
+                status: true,
+            });
             navigate("/");
         } catch (error: any) {
+            handleShowToast({
+                message: "Something went wrong!",
+                status: false,
+            });
             throw new Error(error);
         }
     }

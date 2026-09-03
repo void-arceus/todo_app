@@ -2,6 +2,8 @@ import { useState } from "react";
 import submitIcon from "../../../assets/icons/up_icon.png";
 import cancelIcon from "../../../assets/icons/close_icon.png";
 import { useTask, type IUserTasks } from "../context/TaskContext";
+import Loading from "../../../components/ui/Loading";
+import { useToast } from "../../../core/Toaster/Context/ToastContext";
 
 interface ITaskFormProps {
     handleDisplayTaskForm: () => void;
@@ -15,9 +17,17 @@ export interface ITaskInput {
 function TaskForm({ handleDisplayTaskForm }: ITaskFormProps) {
     const [taskTitle, setTaskTitle] = useState<string>("");
     const [taskDescription, setTaskDescription] = useState<string>("");
-    const { addNewTask } = useTask();
+    const { addNewTask, taskLoading } = useTask();
+    const { handleShowToast } = useToast();
 
     async function addTask() {
+        if (!taskTitle || taskTitle.trim() === "") {
+            handleShowToast({
+                message: "Task name cannot be empty",
+                status: false,
+            });
+            return;
+        }
         const data = {
             taskName: taskTitle,
             taskNote: taskDescription,
@@ -25,8 +35,16 @@ function TaskForm({ handleDisplayTaskForm }: ITaskFormProps) {
         };
         try {
             addNewTask(data as IUserTasks);
+            handleShowToast({
+                message: "Task Added Successfully",
+                status: true,
+            });
             handleDisplayTaskForm();
         } catch (error: any) {
+            handleShowToast({
+                message: "Failed to add task",
+                status: false,
+            });
             throw new Error(error);
         }
     }
@@ -36,7 +54,7 @@ function TaskForm({ handleDisplayTaskForm }: ITaskFormProps) {
             onClick={() => {
                 handleDisplayTaskForm();
             }}
-            className="bg-black/20 h-screen w-full z-50 p-4 flex flex-col items-center absolute"
+            className="bg-black/20 h-screen w-full z-40 p-4 flex flex-col items-center absolute"
         >
             <div className="h-30" />
             <div
@@ -78,11 +96,15 @@ function TaskForm({ handleDisplayTaskForm }: ITaskFormProps) {
                         onClick={() => addTask()}
                         className="bg-hover p-2 border border-border-hover rounded-sm hover:bg-active active:scale-[0.96] cursor-pointer"
                     >
-                        <img
-                            src={submitIcon}
-                            alt="submitIcon"
-                            className="h-2 w-2 active:scale-[0.96] cursor-pointer"
-                        />
+                        {taskLoading ? (
+                            <Loading size={4} color="black" />
+                        ) : (
+                            <img
+                                src={submitIcon}
+                                alt="submitIcon"
+                                className="h-2 w-2 active:scale-[0.96] cursor-pointer"
+                            />
+                        )}
                     </button>
                 </div>
             </div>

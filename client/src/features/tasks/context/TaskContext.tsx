@@ -27,6 +27,8 @@ interface ITaskContextInterface {
     addNewTask: (data: IUserTasks) => void;
     getTasks: () => void;
     taskLoading: boolean;
+    showTaskEditForm: boolean;
+    handleShowTaskEditForm: (val: boolean) => void;
 }
 
 interface ITaskProviderProp {
@@ -38,36 +40,53 @@ const TaskContext = createContext<ITaskContextInterface | undefined>(undefined);
 export function TaskProvider({ children }: ITaskProviderProp) {
     const [userTasks, setUserTasks] = useState<IUserTasks[]>([]);
     const [taskLoading, setTaskLoading] = useState<boolean>(false);
+    const [showTaskEditForm, setShowTaskEditForm] = useState<boolean>(false);
 
     useEffect(() => {
         getTasks();
     }, []);
 
+    function handleShowTaskEditForm(val: boolean) {
+        setShowTaskEditForm(val);
+    }
+
     async function deleteTask(id: string) {
         try {
+            setTaskLoading(true);
             await handleDeleteTask(id);
             alert("Task deleted successfully");
             setUserTasks((prev) => prev.filter((task) => task._id !== id));
         } catch (error: any) {
+            setTaskLoading(false);
             throw new Error(error);
+        } finally {
+            setTaskLoading(false);
         }
     }
 
     async function updateTask(id: string, data: Partial<IUserTasks>) {
         try {
+            setTaskLoading(true);
             const res = await handleUpdateTask(id, data);
             getTasks();
         } catch (error: any) {
+            setTaskLoading(false);
             throw new Error(error);
+        } finally {
+            setTaskLoading(false);
         }
     }
 
     async function addNewTask(data: IUserTasks) {
         try {
+            setTaskLoading(true);
             const res = await handleAddTask(data);
             setUserTasks((prev) => [...prev, res.data]);
         } catch (error: any) {
+            setTaskLoading(false);
             throw new Error(error);
+        } finally {
+            setTaskLoading(false);
         }
     }
 
@@ -98,6 +117,8 @@ export function TaskProvider({ children }: ITaskProviderProp) {
                 updateTask,
                 getTasks,
                 taskLoading,
+                showTaskEditForm,
+                handleShowTaskEditForm,
             }}
         >
             {children}

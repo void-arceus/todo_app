@@ -13,8 +13,8 @@ axios.defaults.withCredentials = true;
 function App() {
     return (
         <AuthProvider>
-            <ToastProvider>
-                <TaskProvider>
+            <TaskProvider>
+                <ToastProvider>
                     <Toast />
                     <Router>
                         <Routes>
@@ -27,8 +27,8 @@ function App() {
                             <Route path="/register" element={<Register />} />
                         </Routes>
                     </Router>
-                </TaskProvider>
-            </ToastProvider>
+                </ToastProvider>
+            </TaskProvider>
         </AuthProvider>
     );
 }

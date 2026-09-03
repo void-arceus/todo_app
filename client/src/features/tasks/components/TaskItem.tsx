@@ -13,7 +13,14 @@ interface ITaskItemProps {
 
 function TaskItem({ taskData }: ITaskItemProps) {
     const [circleImage, setCircleImage] = useState<string>(emptyCircle);
-    const { deleteTask, updateTask } = useTask();
+    const { deleteTask, updateTask, handleShowTaskEditForm } = useTask();
+
+    function markCompleted() {
+        const data: Partial<IUserTasks> = {
+            isCompleted: taskData.isCompleted ? false : true,
+        };
+        updateTask(taskData?._id, data);
+    }
 
     return (
         <div
@@ -23,14 +30,7 @@ function TaskItem({ taskData }: ITaskItemProps) {
             <div className="w-full flex items-start justify-start gap-2">
                 <div className="h-5">
                     <button
-                        onClick={() => {
-                            const data: Partial<IUserTasks> = {
-                                isCompleted: taskData.isCompleted
-                                    ? false
-                                    : true,
-                            };
-                            updateTask(taskData?._id, data);
-                        }}
+                        onClick={markCompleted}
                         onMouseEnter={() => {
                             setCircleImage(emptyCircleHover);
                         }}
@@ -51,7 +51,12 @@ function TaskItem({ taskData }: ITaskItemProps) {
                     </button>
                 </div>
                 <div className="w-full flex items-center justify-between">
-                    <div className="w-full">
+                    <div
+                        onClick={() => {
+                            handleShowTaskEditForm(true);
+                        }}
+                        className="w-full cursor-pointer"
+                    >
                         <h1
                             className={`${taskData.isCompleted ? "text-text-grey line-through" : "text-text-dark"} text-sm font-regular`}
                         >

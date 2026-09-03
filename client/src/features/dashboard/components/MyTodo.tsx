@@ -3,6 +3,8 @@ import TodayView from "../../tasks/components/TodayView";
 import UpcomingView from "../../tasks/components/UpcomingView";
 import FilterView from "../../tasks/components/FilterView";
 import ReportingsView from "../../tasks/components/ReportingsView";
+import TaskEditForm from "../../tasks/components/TaskEditForm";
+import { useTask } from "../../tasks/context/TaskContext";
 
 interface IMyTodoProps {
     activeSideMenu: string;
@@ -10,6 +12,8 @@ interface IMyTodoProps {
 }
 
 function MyTodo({ activeSideMenu, isOpen }: IMyTodoProps) {
+    const { showTaskEditForm } = useTask();
+
     function renderMainContent() {
         switch (activeSideMenu) {
             case "inbox":
@@ -29,6 +33,7 @@ function MyTodo({ activeSideMenu, isOpen }: IMyTodoProps) {
 
     return (
         <main className={`flex-1 w-full h-full flex flex-col`}>
+            {showTaskEditForm ? <TaskEditForm /> : null}
             <div className="w-full flex items-center justify-end py-2 px-4">
                 <span className="py-2 px-3 border border-border-primary hover:border-border-hover rounded-lg text-xs font-medium cursor-pointer select-none hover:shadow-md active:scale-[0.96]">
                     Display: 1

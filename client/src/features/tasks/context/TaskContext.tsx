@@ -25,6 +25,8 @@ interface ITaskContextInterface {
     deleteTask: (id: string) => void;
     updateTask: (id: string, data: Partial<IUserTasks>) => void;
     addNewTask: (data: IUserTasks) => void;
+    getTasks: () => void;
+    taskLoading: boolean;
 }
 
 interface ITaskProviderProp {
@@ -35,6 +37,7 @@ const TaskContext = createContext<ITaskContextInterface | undefined>(undefined);
 
 export function TaskProvider({ children }: ITaskProviderProp) {
     const [userTasks, setUserTasks] = useState<IUserTasks[]>([]);
+    const [taskLoading, setTaskLoading] = useState<boolean>(false);
 
     useEffect(() => {
         getTasks();
@@ -70,6 +73,7 @@ export function TaskProvider({ children }: ITaskProviderProp) {
 
     async function getTasks() {
         try {
+            setTaskLoading(true);
             const res = await handleGetTasks();
             setUserTasks(
                 res.data.sort(
@@ -78,7 +82,10 @@ export function TaskProvider({ children }: ITaskProviderProp) {
                 ),
             );
         } catch (error: any) {
+            setTaskLoading(false);
             throw new Error(error);
+        } finally {
+            setTaskLoading(false);
         }
     }
 
@@ -89,6 +96,8 @@ export function TaskProvider({ children }: ITaskProviderProp) {
                 addNewTask,
                 deleteTask,
                 updateTask,
+                getTasks,
+                taskLoading,
             }}
         >
             {children}

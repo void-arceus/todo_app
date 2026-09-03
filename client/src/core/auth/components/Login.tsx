@@ -2,6 +2,9 @@ import { useForm, type SubmitHandler } from "react-hook-form";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { handleLogin } from "../services/auth.server";
+import { useTask } from "../../../features/tasks/context/TaskContext";
+import Loading from "../../../components/ui/Loading";
+import { useToast } from "../../Toaster/Context/ToastContext";
 
 const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
@@ -23,16 +26,28 @@ function Login() {
     });
     const { handleLoggedIn, handleSetUserData } = useAuth();
     const navigate = useNavigate();
+    const { getTasks } = useTask();
+    const { handleShowToast } = useToast();
 
     const onSubmit: SubmitHandler<LoginInputs> = async (data) => {
         try {
             const res = await handleLogin(data);
             handleSetUserData(res.data);
             handleLoggedIn(true);
+            const toastData = {
+                message: "Logged In Successfully",
+                status: true,
+            };
+            handleShowToast(toastData);
             navigate("/dashboard");
+            getTasks();
         } catch (error: any) {
+            const toastData = {
+                message: "Something went wrong",
+                status: false,
+            };
+            handleShowToast(toastData);
             handleLoggedIn(false);
-            throw new Error(error);
         }
     };
 
@@ -121,9 +136,13 @@ function Login() {
                     <button
                         type="submit"
                         disabled={isSubmitting}
-                        className="w-full bg-button-primary text-text-light font-medium py-3 hover:cursor-pointer hover:shadow-md rounded-xs hover:bg-button-hover"
+                        className="w-full bg-button-primary text-text-light font-medium py-3 hover:cursor-pointer hover:shadow-md rounded-xs hover:bg-button-hover flex items-center justify-center"
                     >
-                        {isSubmitting ? "..." : "Login"}
+                        {isSubmitting ? (
+                            <Loading size={4} color="white" />
+                        ) : (
+                            "Login"
+                        )}
                     </button>
                     <p className="text-sm text-text-dark font-medium">
                         Don't have an account?&nbsp;

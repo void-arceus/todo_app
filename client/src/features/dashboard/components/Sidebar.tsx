@@ -11,7 +11,11 @@ import filterIconActive from "../../../assets/sidebar/filter_active.png";
 import reportingIcon from "../../../assets/sidebar/report.png";
 import reportingIconActive from "../../../assets/sidebar/report_active.png";
 import sidebarIcon from "../../../assets/sidebar/sidebar.png";
+import logoutIcon from "../../../assets/icons/logout_icon.png";
 import { useAuth } from "../../../core/auth/context/AuthContext";
+import { useState } from "react";
+import { handleLogout } from "../../tasks/services/tasks.services";
+import { useNavigate } from "react-router-dom";
 
 interface ISidebarProps {
     activeSideMenu: string;
@@ -28,10 +32,24 @@ function Sidebar({
     handleShowSideBar,
     isOpen,
 }: ISidebarProps) {
-    const { userData } = useAuth();
+    const [userMenu, setUserMenu] = useState<boolean>(false);
+    const { userData, handleLoggedIn, handleSetUserData } = useAuth();
+    const navigate = useNavigate();
+
+    async function logout() {
+        try {
+            await handleLogout();
+            handleSetUserData(null);
+            handleLoggedIn(false);
+            navigate("/");
+        } catch (error: any) {
+            throw new Error(error);
+        }
+    }
 
     return (
         <main
+            onClick={() => setUserMenu(false)}
             className={`fixed top-0 left-0 z-40 h-screen w-full max-w-xs border-r border-border-primary bg-bg-primary shadow-sm flex flex-col transform transition-transform duration-300 ease-in-out ${
                 isOpen
                     ? "translate-x-0 opacity-100"
@@ -39,7 +57,13 @@ function Sidebar({
             }`}
         >
             <div className="p-2 flex items-center justify-between">
-                <div className="flex items-center gap-2 px-2 py-1 hover:bg-hover rounded-md active:scale-[0.96]">
+                <div
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        setUserMenu((prev) => !prev);
+                    }}
+                    className="relative flex items-center gap-2 px-2 py-1 hover:bg-hover rounded-md active:scale-[0.96]"
+                >
                     <span className="bg-black/10 flex items-center justify-center border border-border-hover h-6 w-6 rounded-full text-bold select-none">
                         {userData?.username[0]}
                     </span>
@@ -47,6 +71,33 @@ function Sidebar({
                         {userData?.username}
                     </h1>
                 </div>
+                {userMenu ? (
+                    <div
+                        onClick={(e) => e.stopPropagation()}
+                        className="absolute top-12 left-4 p-1.5 w-60 bg-white rounded-lg shadow-[0_0_10px_2px_rgba(0,0,0,0.1)]"
+                    >
+                        <div
+                            onClick={() => {}}
+                            className="text-start p-2 text-xs font-medium w-full hover:bg-hover rounded-md flex items-center justify-start gap-2"
+                        >
+                            <img alt="." className="h-4" />
+                            <span>Update Profile</span>
+                        </div>
+                        <button
+                            onClick={() => {
+                                logout();
+                            }}
+                            className="text-start p-2 text-xs w-full hover:bg-hover rounded-md flex items-center justify-start gap-2"
+                        >
+                            <img
+                                src={logoutIcon}
+                                alt="logout_icon.png"
+                                className="h-4"
+                            />
+                            <span className="font-medium">Logout</span>
+                        </button>
+                    </div>
+                ) : null}
                 <div className="text-xs font-medium">
                     <button
                         onClick={() => handleShowSideBar()}

@@ -37,3 +37,11 @@ export async function handleUpdateTask(id: string, data: Partial<IUserTasks>) {
         throw new Error(error);
     }
 }
+
+export async function handleLogout() {
+    try {
+        await axios.post(`${BASE_URL}/v1/auth/logout`);
+    } catch (error: any) {
+        throw new Error(error);
+    }
+}

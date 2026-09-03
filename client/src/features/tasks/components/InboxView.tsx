@@ -1,11 +1,13 @@
 import TaskTemplate from "./TaskTemplate";
 import { useState } from "react";
+import { useToast } from "../../../core/Toaster/Context/ToastContext";
+import Loading from "../../../components/ui/Loading";
 
 function InboxView() {
     const [showInputBox, setShowInputBox] = useState<boolean>(false);
     const [taskTitle, setTaskTitle] = useState<string>("");
     const [taskDescription, setTaskDescription] = useState<string>("");
-
+    const { handleShowToast } = useToast();
     return (
         <div className="w-full max-w-3xl flex flex-col items-center justify-center p-4 gap-2">
             <TaskTemplate menuTitle={"Inbox"} />
@@ -39,8 +41,18 @@ function InboxView() {
                             >
                                 Cancel
                             </button>
-                            <button className="text-sm font-medium text-text-light bg-button-primary hover:bg-button-hover px-3.5 py-1.5 rounded-sm cursor-pointer hover:shadow-md active:scale-[0.96]">
-                                Add
+                            <button
+                                onClick={() => {
+                                    const data = {
+                                        message: "Testing my toaster...",
+                                        status: false,
+                                        isActive: true,
+                                    };
+                                    handleShowToast(data);
+                                }}
+                                className="text-sm font-medium text-text-light bg-button-primary hover:bg-button-hover px-3.5 py-1.5 rounded-sm cursor-pointer hover:shadow-md active:scale-[0.96]"
+                            >
+                                <Loading size={4} color="white" />
                             </button>
                         </div>
                     </div>

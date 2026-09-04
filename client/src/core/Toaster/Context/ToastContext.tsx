@@ -39,16 +39,18 @@ export function ToastProvider({ children }: IToastProviderProps) {
         data.isActive = true;
         setToastData(data);
         toastRef.current = setTimeout(() => {
-            setToastData({
-                message: "",
-                status: false,
-                isActive: false,
-            });
+            setToastData((prev) => ({ ...prev, message: "", isActive: false }));
+            setTimeout(() => {
+                setToastData((prev) => ({ ...prev, status: false }));
+            }, 300);
         }, 2000);
     }
 
     function hideToast() {
-        setToastData({ message: "", status: false, isActive: false });
+        setToastData((prev) => ({ ...prev, message: "", isActive: false }));
+        setTimeout(() => {
+            setToastData((prev) => ({ ...prev, status: false }));
+        }, 300);
     }
 
     return (

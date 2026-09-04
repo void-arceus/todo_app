@@ -60,7 +60,7 @@ function Sidebar({
     return (
         <main
             onClick={() => setUserMenu(false)}
-            className={`fixed top-0 left-0 z-40 h-screen w-full max-w-xs border-r border-border-primary bg-bg-primary shadow-sm flex flex-col transform transition-transform duration-300 ease-in-out ${
+            className={`fixed top-0 left-0 z-40 h-screen w-full max-w-xs border-r border-border-primary bg-bg1-primary shadow-sm flex flex-col transform transition-transform duration-300 ease-in-out ${
                 isOpen
                     ? "translate-x-0 opacity-100"
                     : "opacity-50 -translate-x-full"

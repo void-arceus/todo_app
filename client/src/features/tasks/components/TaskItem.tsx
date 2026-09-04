@@ -1,25 +1,37 @@
 import { useState } from "react";
 import { type IUserTasks } from "../context/TaskContext";
-import emptyCircle from "../../../assets/icons/empty_circle.png";
-import emptyCircleHover from "../../../assets/icons/empty_circle_hover.png";
 import editIcon from "../../../assets/icons/edit_icon.png";
 import deleteIcon from "../../../assets/icons/delete.png";
 import commentIcon from "../../../assets/icons/comment.png";
 import { useTask } from "../context/TaskContext";
+import filledCheckBox from "../../../assets/icons/checkbox.png";
+import emptyCheckBox from "../../../assets/icons/unchecked.png";
+import { useToast } from "../../../core/Toaster/Context/ToastContext";
 
 interface ITaskItemProps {
     taskData: IUserTasks;
 }
 
 function TaskItem({ taskData }: ITaskItemProps) {
-    const [circleImage, setCircleImage] = useState<string>(emptyCircle);
+    const [checkBox, setCheckBox] = useState<string>(emptyCheckBox);
     const { deleteTask, updateTask, handleShowTaskEditForm } = useTask();
+    const { handleShowToast } = useToast();
 
     function markCompleted() {
         const data: Partial<IUserTasks> = {
             isCompleted: taskData.isCompleted ? false : true,
         };
         updateTask(taskData?._id, data);
+        const ToastData = {
+            message: "",
+            status: true,
+        };
+        if (data.isCompleted) {
+            ToastData.message = "Task marked completed";
+        } else {
+            ToastData.message = "Task marked uncompleted";
+        }
+        handleShowToast(ToastData);
     }
 
     return (
@@ -32,18 +44,16 @@ function TaskItem({ taskData }: ITaskItemProps) {
                     <button
                         onClick={markCompleted}
                         onMouseEnter={() => {
-                            setCircleImage(emptyCircleHover);
+                            setCheckBox(filledCheckBox);
                         }}
                         onMouseLeave={() => {
-                            setCircleImage(emptyCircle);
+                            setCheckBox(emptyCheckBox);
                         }}
                         className="hover:cursor-pointer pt-1 h-5"
                     >
                         <img
                             src={
-                                taskData.isCompleted
-                                    ? emptyCircleHover
-                                    : circleImage
+                                taskData.isCompleted ? filledCheckBox : checkBox
                             }
                             alt="empty_circle.png"
                             className="h-5 object-fit"

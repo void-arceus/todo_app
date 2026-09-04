@@ -139,7 +139,7 @@ function Login() {
                         className="w-full bg-button-primary text-text-light font-medium py-3 hover:cursor-pointer hover:shadow-md rounded-xs hover:bg-button-hover flex items-center justify-center"
                     >
                         {isSubmitting ? (
-                            <Loading size={4} color="white" />
+                            <Loading size={6} color="white" />
                         ) : (
                             "Login"
                         )}

@@ -9,7 +9,7 @@ import handleUpdateComment, {
 const router: Router = express.Router();
 
 router.get("/:id", authUser, handleGetComments);
-router.post("/", authUser, handleAddComment);
+router.post("", authUser, handleAddComment);
 router.patch("/:id", authUser, handleUpdateComment);
 router.delete("/:id", authUser, handleDeleteComment);
 

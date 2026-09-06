@@ -14,7 +14,12 @@ interface ITaskItemProps {
 
 function TaskItem({ taskData }: ITaskItemProps) {
     const [checkBox, setCheckBox] = useState<string>(emptyCheckBox);
-    const { deleteTask, updateTask, handleShowTaskEditForm } = useTask();
+    const {
+        deleteTask,
+        updateTask,
+        handleShowTaskEditForm,
+        handleSelectedTaskId,
+    } = useTask();
     const { handleShowToast } = useToast();
 
     function markCompleted() {
@@ -32,6 +37,11 @@ function TaskItem({ taskData }: ITaskItemProps) {
             ToastData.message = "Task marked uncompleted";
         }
         handleShowToast(ToastData);
+    }
+
+    function handleDisplayEditForm(flag: boolean, id: string) {
+        handleShowTaskEditForm(flag);
+        handleSelectedTaskId(id);
     }
 
     return (
@@ -60,10 +70,10 @@ function TaskItem({ taskData }: ITaskItemProps) {
                         />
                     </button>
                 </div>
-                <div className="w-full flex items-center justify-between">
+                <div className="flex-1 flex items-center justify-between">
                     <div
                         onClick={() => {
-                            handleShowTaskEditForm(true);
+                            handleDisplayEditForm(true, taskData._id);
                         }}
                         className="w-full cursor-pointer"
                     >
@@ -79,10 +89,20 @@ function TaskItem({ taskData }: ITaskItemProps) {
                         </p>
                     </div>
                     <div className="w-full flex items-center justify-end pl-2 gap-3">
-                        <button className="hover:cursor-pointer">
+                        <button
+                            onClick={() =>
+                                handleDisplayEditForm(true, taskData._id)
+                            }
+                            className="hover:cursor-pointer"
+                        >
                             <img src={editIcon} className="h-4 w-4" />
                         </button>
-                        <button className="hover:cursor-pointer">
+                        <button
+                            onClick={() =>
+                                handleDisplayEditForm(true, taskData._id)
+                            }
+                            className="hover:cursor-pointer"
+                        >
                             <img src={commentIcon} className="h-4 w-4" />
                         </button>
                         <button

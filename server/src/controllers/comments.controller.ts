@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import Comments from "../models/comment.model";
-import { kill } from "node:process";
 
 export async function handleAddComment(
     req: Request,
@@ -118,15 +117,18 @@ export async function handleGetComments(
     res: Response,
 ): Promise<Response> {
     try {
-        const { taskId } = req.params;
-        if (!taskId) {
+        const { id } = req.params;
+        if (!id) {
             return res.status(400).json({
                 status: false,
                 message: "Task ID is required",
             });
         }
 
-        const comments = await Comments.find({ taskId, userId: req.user?.id });
+        const comments = await Comments.find({
+            taskId: id,
+            userId: req.user?.id,
+        });
 
         return res.status(comments.length === 0 ? 204 : 200).json({
             status: true,

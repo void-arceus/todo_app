@@ -5,7 +5,7 @@ import cookieParser from "cookie-parser";
 import connectDB from "./config/db";
 import authRouter from "./routes/auth.route";
 import taskRouter from "./routes/task.route";
-import commentRouter from "./routes/comments.router";
+import commentRouter from "./routes/comments.route";
 import cors, { CorsOptions } from "cors";
 
 const PORT = process.env.PORT;
@@ -37,7 +37,7 @@ connectDB();
 // routes
 app.use("/v1/auth", authRouter);
 app.use("/v1/task", taskRouter);
-app.use("/v1/comments/", commentRouter);
+app.use("/v1/comments", commentRouter);
 
 app.listen(PORT, () => {
     console.log(`Server is running at port: ${PORT}`);

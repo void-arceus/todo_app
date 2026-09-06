@@ -3,9 +3,9 @@ import { useTask } from "../context/TaskContext";
 import inboxIcon from "../../../assets/sidebar/inbox_active.png";
 import emptyCircleIcon from "../../../assets/icons/empty_circle.png";
 import emptyCicleActive from "../../../assets/icons/empty_circle_hover.png";
-import submitIcon from "../../../assets/icons/submit_icon.png";
 import menuIcon from "../../../assets/icons/menu_dots.png";
 import closeIcon from "../../../assets/icons/close_icon.png";
+import Comments from "../comments/Comments";
 
 function TaskEditForm() {
     const { handleShowTaskEditForm } = useTask();
@@ -75,47 +75,8 @@ function TaskEditForm() {
                                 </p>
                             </div>
                         </div>
-                        <div className="p-2 w-full flex flex-col items-start">
-                            <button className="text-sm text-text-dark font-medium cursor-pointer select-none py-2 px-4">
-                                Comments
-                            </button>
-                            {/* comments for later */}
-                            <div className="flex items-start gap-2 px-4 my-4">
-                                <div className="px-3 py-1 border border-border-hover bg-black/10 rounded-full">
-                                    <h1 className="text-md font-medium">v</h1>
-                                </div>
-                                <div className="flex flex-col gap-1">
-                                    <p className="text-xs font-bold text-text-dark">
-                                        void_arceus
-                                    </p>
-                                    <span className="text-xs font-medium text-text-grey">
-                                        This is test comment
-                                    </span>
-                                </div>
-                            </div>
-
-                            {/* add comment section */}
-                            <div className="w-full my-3">
-                                <div className="w-full px-4 relative flex items-center gap-2">
-                                    <div className="px-3 py-1 border border-border-hover rounded-full bg-black/10 cursor-pointer">
-                                        <h1 className="text-md select-none cursor-pointer">
-                                            v
-                                        </h1>
-                                    </div>
-                                    <input
-                                        placeholder="Add a comment"
-                                        className="text-xs text-text-grey outline-0 border border-border-primary w-full p-2 rounded-full focus:border-border-hover"
-                                    />
-                                    <button className="absolute right-8 top-2 text-xs font-semibold cursor-pointer select-none z-10">
-                                        <img
-                                            src={submitIcon}
-                                            alt="submit_icon.png"
-                                            className="h-4"
-                                        />
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
+                        {/* comments-section */}
+                        <Comments />
                     </div>
                     {/* right */}
                     <div className="h-full w-sm p-2 flex flex-col">

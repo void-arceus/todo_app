@@ -29,6 +29,8 @@ interface ITaskContextInterface {
     taskLoading: boolean;
     showTaskEditForm: boolean;
     handleShowTaskEditForm: (val: boolean) => void;
+    selectedTaskId: string;
+    handleSelectedTaskId: (val: string) => void;
 }
 
 interface ITaskProviderProp {
@@ -41,10 +43,15 @@ export function TaskProvider({ children }: ITaskProviderProp) {
     const [userTasks, setUserTasks] = useState<IUserTasks[]>([]);
     const [taskLoading, setTaskLoading] = useState<boolean>(false);
     const [showTaskEditForm, setShowTaskEditForm] = useState<boolean>(false);
+    const [selectedTaskId, setSelectedTaskId] = useState<string>("");
 
     useEffect(() => {
         getTasks();
     }, []);
+
+    function handleSelectedTaskId(id: string) {
+        setSelectedTaskId(id);
+    }
 
     function handleShowTaskEditForm(val: boolean) {
         setShowTaskEditForm(val);
@@ -119,6 +126,8 @@ export function TaskProvider({ children }: ITaskProviderProp) {
                 taskLoading,
                 showTaskEditForm,
                 handleShowTaskEditForm,
+                selectedTaskId,
+                handleSelectedTaskId,
             }}
         >
             {children}

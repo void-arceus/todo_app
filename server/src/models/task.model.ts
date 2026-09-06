@@ -32,7 +32,7 @@ const taskSchema = new Schema<iTask>({
     },
     userId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "user",
+        ref: "users",
         required: true,
     },
 });

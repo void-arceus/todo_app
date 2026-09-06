@@ -1,7 +1,7 @@
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
-import { handleLogin } from "../services/auth.server";
+import { handleLogin } from "../services/auth.service";
 import { useTask } from "../../../features/tasks/context/TaskContext";
 import Loading from "../../../components/ui/Loading";
 import { useToast } from "../../Toaster/Context/ToastContext";

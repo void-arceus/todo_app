@@ -14,7 +14,7 @@ import sidebarIcon from "../../../assets/sidebar/sidebar.png";
 import logoutIcon from "../../../assets/icons/logout_icon.png";
 import { useAuth } from "../../../core/auth/context/AuthContext";
 import { useState } from "react";
-import { handleLogout } from "../../tasks/services/tasks.services";
+import { handleLogout } from "../../tasks/services/tasks.service";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "../../../core/Toaster/Context/ToastContext";
 

@@ -5,7 +5,7 @@ import {
     useEffect,
     type ReactNode,
 } from "react";
-import { handleCheckUser } from "../services/auth.server";
+import { handleCheckUser } from "../services/auth.service";
 
 interface IUserData {
     username: string;

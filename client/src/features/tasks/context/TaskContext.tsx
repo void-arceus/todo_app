@@ -10,7 +10,7 @@ import {
     handleDeleteTask,
     handleGetTasks,
     handleUpdateTask,
-} from "../services/tasks.services";
+} from "../services/tasks.service";
 
 export interface IUserTasks {
     _id: string;

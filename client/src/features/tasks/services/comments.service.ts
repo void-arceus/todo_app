@@ -31,15 +31,21 @@ export async function updateComment(data: IPostCommentData) {
             `${BASE_URL}/v1/comments/${data.id}`,
             data,
         );
-        return res.data.data;
+        return res.data;
     } catch (error: any) {
         throw new Error(error);
     }
 }
 
-export async function deleteComment(id: string) {
+export async function deleteComment(id: string, taskId: string) {
     try {
-        await axios.delete(`${BASE_URL}/v1/comments/${id}`);
+        const data = {
+            taskId: taskId,
+        };
+        const res = await axios.delete(`${BASE_URL}/v1/comments/${id}`, {
+            data,
+        });
+        return res.data;
     } catch (error: any) {
         throw new Error(error);
     }

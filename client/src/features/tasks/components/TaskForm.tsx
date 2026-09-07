@@ -12,6 +12,7 @@ interface ITaskFormProps {
 export interface ITaskInput {
     taskName: string;
     taskNote: string;
+    isEdited?: boolean;
 }
 
 function TaskForm({ handleDisplayTaskForm }: ITaskFormProps) {

@@ -1,7 +1,12 @@
 import { useEffect, useState } from "react";
 import submitIcon from "../../../assets/icons/submit_icon.png";
 import { useTask } from "../context/TaskContext";
-import { addComment, getComments } from "../services/comments.service";
+import {
+    addComment,
+    getComments,
+    updateComment,
+    deleteComment,
+} from "../services/comments.service";
 import { useToast } from "../../../core/Toaster/Context/ToastContext";
 import { type IPostCommentData } from "../services/comments.service";
 import menuIcon from "../../../assets/icons/menu_dots.png";
@@ -13,6 +18,7 @@ interface ICommentData {
     message: string;
     userId: string;
     taskId: string;
+    isEdited: boolean;
     createdAt: Date;
     updatedAt: Date;
 }
@@ -71,6 +77,71 @@ function Comments() {
         }
     }
 
+    async function handleUpdateComment() {
+        try {
+            if (!editedComment || editedComment.trim() === "") {
+                handleShowToast({
+                    message: "Comment cannot be empty!",
+                    status: false,
+                });
+            }
+            const data: IPostCommentData = {
+                id: selectedCommentId,
+                comment: editedComment,
+                taskId: selectedTaskId,
+            };
+            const res = await updateComment(data);
+            if (res?.status) {
+                setCommentData((prev) =>
+                    prev.map((c) => {
+                        if (c._id === selectedCommentId) {
+                            c.message = editedComment;
+                            c.isEdited = true;
+                            c.updatedAt = new Date();
+                        }
+                        return c;
+                    }),
+                );
+                handleShowToast({
+                    message: "Comment udpated successfully",
+                    status: true,
+                });
+                setEditedComment("");
+                setSelectedCommentId("");
+                setDisplayCommentEditor(false);
+            } else {
+                handleShowToast({
+                    message: "Failed to Edit Comment",
+                    status: false,
+                });
+            }
+        } catch (error: any) {
+            throw new Error(error);
+        }
+    }
+
+    async function handleDeleteComment() {
+        try {
+            const res = await deleteComment(selectedCommentId, selectedTaskId);
+            if (res?.status) {
+                setCommentData((prev) =>
+                    prev.filter((p) => p._id !== selectedCommentId),
+                );
+                handleShowToast({
+                    message: "Comment deleted successfully!",
+                    status: true,
+                });
+            } else {
+                handleShowToast({
+                    message: "Failed to delete comment",
+                    status: false,
+                });
+            }
+        } catch (error: any) {
+            throw new Error(error);
+        }
+    }
+
     function formatDate(myDate: Date) {
         const options = {
             year: "numeric",
@@ -91,7 +162,7 @@ function Comments() {
             onClick={() => {
                 setDisplayCommentOptions(false);
             }}
-            className="p-2 flex-1 w-full flex flex-col items-start"
+            className="pl-2 flex-1 w-full flex flex-col items-start"
         >
             <button className="text-sm text-text-dark font-semibold cursor-pointer select-none py-2 px-4">
                 Comments
@@ -106,18 +177,35 @@ function Comments() {
                             key={comment._id}
                             className="w-full p-2"
                         >
-                            <div className="border border-border-primary">
-                                <input />
-                                <div>
+                            <div className="border border-border-primary p-2 rounded-lg shadow-sm hover:border-border-hover gap-2">
+                                <div className="w-full">
+                                    <input
+                                        value={editedComment}
+                                        onChange={(e) =>
+                                            setEditedComment(e.target.value)
+                                        }
+                                        placeholder="edit comment"
+                                        className="text-xs text-text-grey font-medium w-full outline-0 p-2"
+                                    />
+                                </div>
+                                <div className="w-full flex items-center justify-end gap-2">
                                     <button
                                         onClick={() => {
                                             setDisplayCommentEditor(false);
                                             setSelectedCommentId("");
                                         }}
+                                        className="text-xs font-regular text-text-dark hover:text-text-grey hover:cursor-pointer"
                                     >
-                                        Cancel
+                                        cancel
                                     </button>
-                                    <button>Update</button>
+                                    <button
+                                        onClick={() => {
+                                            handleUpdateComment();
+                                        }}
+                                        className="text-xs bg-button-primary hover:bg-button-hover px-3 py-1.5 rounded-md hover:cursor-pointer text-text-light font-semibold shadow-sm hover:shadow-md"
+                                    >
+                                        Edit
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -125,16 +213,17 @@ function Comments() {
                         <div
                             onClick={(e) => e.stopPropagation()}
                             key={comment?._id}
-                            className="relative w-full flex items-start justify-between gap-2 px-4 py-2"
+                            className="relative w-full flex items-start justify-between gap-2 pl-4 pr-2 py-2"
                         >
                             {displayCommentOptions &&
                             selectedCommentId === comment._id ? (
-                                <div className="absolute w-25 top-8 right-4 bg-white border border-border-primary shadow-md p-1 rounded-lg hover:border-border-hover z-40 flex flex-col items-center">
+                                <div className="absolute w-40 top-8 right-4 bg-white border border-border-primary shadow-md p-2 rounded-lg hover:border-border-hover z-40 flex flex-col items-center">
                                     <button
-                                        onClick={() =>
-                                            setDisplayCommentEditor(true)
-                                        }
-                                        className="w-full flex items-center justify-start gap-2 px-2 py-1 hover:bg-active rounded-sm hover:cursor-pointer active:scale-[0.98]"
+                                        onClick={() => {
+                                            setEditedComment(comment?.message);
+                                            setDisplayCommentEditor(true);
+                                        }}
+                                        className="w-full flex items-center justify-start gap-2 px-2 py-1.5 hover:bg-active rounded-sm hover:cursor-pointer active:scale-[0.98]"
                                     >
                                         <img
                                             src={editIcon}
@@ -145,7 +234,10 @@ function Comments() {
                                             Edit
                                         </span>
                                     </button>
-                                    <button className="w-full flex items-center justify-start gap-2 px-2 py-1 hover:bg-active rounded-sm hover:cursor-pointer active:scale-[0.98]">
+                                    <button
+                                        onClick={handleDeleteComment}
+                                        className="w-full flex items-center justify-start gap-2 px-2 py-1.5 hover:bg-active rounded-sm hover:cursor-pointer active:scale-[0.98]"
+                                    >
                                         <img
                                             src={deleteIcon}
                                             alt="delete_icon.png"
@@ -158,8 +250,12 @@ function Comments() {
                                 </div>
                             ) : null}
                             <div className="flex items-center gap-2">
-                                <div className="h-8 w-8 flex items-center justify-center border border-border-hover bg-black/10 rounded-full">
-                                    <h1 className="text-md font-medium">v</h1>
+                                <div className="w-8 flex items-center justify-center">
+                                    <div className="w-8 h-8 border border-border-hover rounded-full flex items-center justify-center">
+                                        <span className="text-md font-medium">
+                                            v
+                                        </span>
+                                    </div>
                                 </div>
                                 <div className="flex flex-col gap-1">
                                     <div className="flex items-center gap-2">
@@ -167,31 +263,46 @@ function Comments() {
                                             void_arceus
                                         </p>
                                         <span className="text-[12px] font-medium text-text-grey">
-                                            {formatDate(comment?.createdAt)}
+                                            {comment?.isEdited
+                                                ? formatDate(comment?.updatedAt)
+                                                : formatDate(
+                                                      comment?.createdAt,
+                                                  )}
                                         </span>
+                                        {comment?.isEdited ? (
+                                            <span className="text-xs text-text-grey font-regular">
+                                                (edited)
+                                            </span>
+                                        ) : null}
                                     </div>
                                     <span className="text-xs font-medium text-text-grey">
                                         {comment?.message}
                                     </span>
                                 </div>
                             </div>
-                            <button
-                                onClick={() => {
-                                    setSelectedCommentId(
-                                        selectedCommentId === comment._id
-                                            ? ""
-                                            : comment._id,
-                                    );
-                                    setDisplayCommentOptions((prev) => !prev);
-                                }}
-                                className="cursor-pointer active:scale-[0.96]"
-                            >
-                                <img
-                                    src={menuIcon}
-                                    alt="menu_icon.png"
-                                    className="h-4 cursor-pointer active:scale-[0.96]"
-                                />
-                            </button>
+                            <div className="w-10">
+                                <button
+                                    onClick={() => {
+                                        setSelectedCommentId(
+                                            selectedCommentId === comment._id
+                                                ? ""
+                                                : comment._id,
+                                        );
+                                        setDisplayCommentOptions(
+                                            selectedCommentId === comment._id
+                                                ? false
+                                                : true,
+                                        );
+                                    }}
+                                    className="cursor-pointer active:scale-[0.96]"
+                                >
+                                    <img
+                                        src={menuIcon}
+                                        alt="menu_icon.png"
+                                        className="h-4 cursor-pointer active:scale-[0.96]"
+                                    />
+                                </button>
+                            </div>
                         </div>
                     ),
                 )
@@ -215,7 +326,7 @@ function Comments() {
                         placeholder="Add a comment"
                         value={commentMessage}
                         onChange={(e) => setCommentMessage(e.target.value)}
-                        className="text-xs text-text-grey outline-0 border border-border-primary w-full p-2 rounded-full focus:border-border-hover"
+                        className="text-xs text-text-grey outline-0 border border-border-primary w-full p-2 pr-10 rounded-full focus:border-border-hover"
                     />
                     <button
                         onClick={handleAddComment}

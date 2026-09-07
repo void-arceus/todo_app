@@ -4,6 +4,7 @@ interface IComment {
     userId: mongoose.Types.ObjectId;
     taskId: mongoose.Types.ObjectId;
     message: string;
+    isEdited: boolean;
     createdAt: Date;
     updatedAt: Date;
 }
@@ -19,6 +20,10 @@ const TaskSchema = new Schema<IComment>(
             type: mongoose.Types.ObjectId,
             required: true,
             ref: "tasks",
+        },
+        isEdited: {
+            type: Boolean,
+            default: false,
         },
         message: {
             type: String,

@@ -51,12 +51,13 @@ export default async function handleUpdateComment(
         const { id } = req.params; // comment id
 
         // update comment if it exists
-        const updateComment = await Comments.findOneAndUpdate(
+        const date = new Date();
+        const updatedComment = await Comments.findOneAndUpdate(
             { _id: id, taskId: taskId, userId: req.user?.id },
-            { message: comment },
+            { message: comment, updatedAt: date, isEdited: true },
         );
 
-        if (!updateComment) {
+        if (!updatedComment) {
             return res.status(404).json({
                 status: false,
                 message: "Invalid Comment Id",
@@ -66,7 +67,7 @@ export default async function handleUpdateComment(
         return res.status(200).json({
             status: true,
             message: "Comment updated",
-            data: { comment: updateComment },
+            data: { comment: updatedComment },
         });
     } catch (error: any) {
         return res.status(500).json({

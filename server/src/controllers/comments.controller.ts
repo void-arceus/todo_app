@@ -7,6 +7,8 @@ export async function handleAddComment(
 ): Promise<Response> {
     try {
         const { taskId, comment } = req.body;
+        console.log("taskId:", taskId);
+        console.log("comment message:", comment);
         if (
             !taskId ||
             !comment ||
@@ -25,10 +27,12 @@ export async function handleAddComment(
             message: comment,
         });
 
+        console.log("Comment data:", newComment);
+
         return res.status(201).json({
             status: true,
             message: "Comment posted successfully",
-            data: { comment: newComment },
+            data: { newComment: newComment },
         });
     } catch (error: any) {
         return res.status(500).json({
@@ -127,7 +131,6 @@ export async function handleGetComments(
 
         const comments = await Comments.find({
             taskId: id,
-            userId: req.user?.id,
         });
 
         return res.status(comments.length === 0 ? 204 : 200).json({

@@ -8,7 +8,7 @@ import closeIcon from "../../../assets/icons/close_icon.png";
 import Comments from "../comments/Comments";
 
 function TaskEditForm() {
-    const { handleShowTaskEditForm } = useTask();
+    const { handleShowTaskEditForm, handleSelectedTaskId } = useTask();
     const [activeCircleIcon, setActiveCircleIcon] =
         useState<string>(emptyCircleIcon);
 
@@ -36,7 +36,10 @@ function TaskEditForm() {
                             />
                         </button>
                         <button
-                            onClick={() => handleShowTaskEditForm(false)}
+                            onClick={() => {
+                                handleSelectedTaskId("");
+                                handleShowTaskEditForm(false);
+                            }}
                             className="text-xs text-text-dark font-medium cursor-pointer p-1 rounded-sm active:scale-[0.96]"
                         >
                             <img
@@ -49,7 +52,7 @@ function TaskEditForm() {
                 </div>
                 <div className="w-full flex-1 flex">
                     {/* left */}
-                    <div className="h-full w-full border-r border-border-primary py-4 px-2">
+                    <div className="h-full w-full border-r border-border-primary py-4 px-2 flex flex-col">
                         <div className="w-full flex items-start gap-2 border-b border-border-primary py-2">
                             <button
                                 onMouseEnter={() =>

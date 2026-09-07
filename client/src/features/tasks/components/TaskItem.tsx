@@ -70,7 +70,7 @@ function TaskItem({ taskData }: ITaskItemProps) {
                         />
                     </button>
                 </div>
-                <div className="flex-1 flex items-center justify-between">
+                <div className="w-full flex items-center justify-between">
                     <div
                         onClick={() => {
                             handleDisplayEditForm(true, taskData._id);
@@ -88,7 +88,7 @@ function TaskItem({ taskData }: ITaskItemProps) {
                             {taskData?.taskNote}
                         </p>
                     </div>
-                    <div className="w-full flex items-center justify-end pl-2 gap-3">
+                    <div className="w-25 flex items-center justify-end pl-2 gap-3">
                         <button
                             onClick={() =>
                                 handleDisplayEditForm(true, taskData._id)

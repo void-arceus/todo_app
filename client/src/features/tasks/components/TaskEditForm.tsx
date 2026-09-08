@@ -11,7 +11,6 @@ import deleteIcon from "../../../assets/icons/delete.png";
 import { handleUpdateTask } from "../services/tasks.service";
 import { useToast } from "../../../core/Toaster/Context/ToastContext";
 import Loading from "../../../components/ui/Loading";
-import { type IUserTasks } from "../context/TaskContext";
 
 function TaskEditForm() {
     const {
@@ -20,7 +19,6 @@ function TaskEditForm() {
         handleSetSelectedTask,
         selectedTask,
         selectedTaskId,
-        updateTask,
     } = useTask();
     const [isTaskEditing, setIsTaskEditing] = useState<boolean>(false);
     const [selectedTaskName, setSelectedTaskName] = useState<string>("");
@@ -67,21 +65,28 @@ function TaskEditForm() {
         }
     }
 
-    function markCompleted() {
-        const data: Partial<IUserTasks> = {
-            isCompleted: selectedTask?.isCompleted ? false : true,
-        };
-        updateTask(selectedTaskId, data);
-        const ToastData = {
-            message: "",
-            status: true,
-        };
-        if (data.isCompleted) {
-            ToastData.message = "Task marked completed";
-        } else {
-            ToastData.message = "Task marked uncompleted";
+    async function updateTaskStatus() {
+        try {
+            const status = selectedTask?.isCompleted;
+            const data = {
+                isCompleted: status ? false : true,
+            };
+            const res = await handleUpdateTask(selectedTaskId, data);
+            if (res?.status) {
+                handleSetSelectedTask(res?.data?.updatedData);
+                const message = data?.isCompleted
+                    ? "Task marked Completed!"
+                    : "Task mark incompleted!";
+                handleShowToast({ message, status: true });
+            } else {
+                handleShowToast({
+                    message: "Failed to update task",
+                    status: false,
+                });
+            }
+        } catch (error: any) {
+            throw new Error(error);
         }
-        handleShowToast(ToastData);
     }
 
     return (
@@ -178,6 +183,7 @@ function TaskEditForm() {
                         ) : (
                             <div className="w-full flex items-start gap-2 border-b border-border-primary py-2 px-2">
                                 <button
+                                    onClick={updateTaskStatus}
                                     onMouseEnter={() =>
                                         setActiveCircleIcon(emptyCicleActive)
                                     }

@@ -91,6 +91,15 @@ export function TaskProvider({ children }: ITaskProviderProp) {
         try {
             setTaskLoading(true);
             const res = await handleUpdateTask(id, data);
+            handleSetSelectedTask(res.data?.updatedData);
+            setUserTasks((prev) =>
+                prev.map((p) => {
+                    if (p._id === selectedTaskId) {
+                        return res.data?.updatedData;
+                    }
+                    return p;
+                }),
+            );
             getTasks();
         } catch (error: any) {
             setTaskLoading(false);

@@ -87,7 +87,6 @@ export async function handleUpdateTask(req: Request, res: Response) {
     try {
         const { id } = req.params;
         const data = req.body;
-        data.isEdited = true;
 
         const updatedData = await Tasks.findOneAndUpdate(
             {
@@ -97,7 +96,7 @@ export async function handleUpdateTask(req: Request, res: Response) {
             {
                 $set: data,
             },
-            ReturnDocument,
+            { returnDocument: "after" },
         );
 
         if (!updatedData) {
@@ -107,7 +106,7 @@ export async function handleUpdateTask(req: Request, res: Response) {
             });
         }
 
-        console.log("Updated task:", updatedData);
+        console.log("Updated data:", updatedData);
 
         return res.status(200).json({
             status: true,

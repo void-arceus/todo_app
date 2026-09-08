@@ -95,9 +95,12 @@ function TaskItem({ taskData }: ITaskItemProps) {
                         </div>
                         <div className="w-25 flex items-center justify-end pl-2 gap-3">
                             <button
-                                onClick={() =>
-                                    handleDisplayEditForm(true, taskData._id)
-                                }
+                                onClick={() => {
+                                    handleSetSelectedTask(
+                                        taskData as IUserTasks,
+                                    );
+                                    handleDisplayEditForm(true, taskData._id);
+                                }}
                                 className="hover:cursor-pointer"
                             >
                                 <img src={editIcon} className="h-4 w-4" />

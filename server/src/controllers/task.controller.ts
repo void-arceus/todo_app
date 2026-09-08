@@ -1,5 +1,6 @@
 import { type Request, type Response } from "express";
 import Tasks from "../models/task.model";
+import { ReturnDocument } from "mongodb";
 
 export async function handleAddTask(req: Request, res: Response) {
     try {
@@ -86,6 +87,7 @@ export async function handleUpdateTask(req: Request, res: Response) {
     try {
         const { id } = req.params;
         const data = req.body;
+        data.isEdited = true;
 
         const updatedData = await Tasks.findOneAndUpdate(
             {
@@ -95,6 +97,7 @@ export async function handleUpdateTask(req: Request, res: Response) {
             {
                 $set: data,
             },
+            ReturnDocument,
         );
 
         if (!updatedData) {
@@ -104,10 +107,12 @@ export async function handleUpdateTask(req: Request, res: Response) {
             });
         }
 
+        console.log("Updated task:", updatedData);
+
         return res.status(200).json({
             status: true,
             message: "Task Updated Successfully",
-            data: updatedData,
+            data: { updatedData: updatedData },
         });
     } catch (error: any) {
         return res.status(500).json({

@@ -18,6 +18,7 @@ export interface IUserTasks {
     taskNote: string;
     taskPriority: string;
     isCompleted: boolean;
+    isEdited: boolean;
 }
 
 interface ITaskContextInterface {
@@ -31,6 +32,8 @@ interface ITaskContextInterface {
     handleShowTaskEditForm: (val: boolean) => void;
     selectedTaskId: string;
     handleSelectedTaskId: (val: string) => void;
+    selectedTask: IUserTasks | null;
+    handleSetSelectedTask: (val: IUserTasks) => void;
 }
 
 interface ITaskProviderProp {
@@ -44,10 +47,23 @@ export function TaskProvider({ children }: ITaskProviderProp) {
     const [taskLoading, setTaskLoading] = useState<boolean>(false);
     const [showTaskEditForm, setShowTaskEditForm] = useState<boolean>(false);
     const [selectedTaskId, setSelectedTaskId] = useState<string>("");
+    const [selectedTask, setSelectedTask] = useState<IUserTasks | null>(null);
 
     useEffect(() => {
         getTasks();
     }, []);
+
+    function handleSetSelectedTask(val: IUserTasks) {
+        setSelectedTask(val);
+        setUserTasks((prev) =>
+            prev.map((p) => {
+                if (p._id === val._id) {
+                    return val;
+                }
+                return p;
+            }),
+        );
+    }
 
     function handleSelectedTaskId(id: string) {
         setSelectedTaskId(id);
@@ -128,6 +144,8 @@ export function TaskProvider({ children }: ITaskProviderProp) {
                 handleShowTaskEditForm,
                 selectedTaskId,
                 handleSelectedTaskId,
+                selectedTask,
+                handleSetSelectedTask,
             }}
         >
             {children}

@@ -19,6 +19,7 @@ function TaskItem({ taskData }: ITaskItemProps) {
         updateTask,
         handleShowTaskEditForm,
         handleSelectedTaskId,
+        handleSetSelectedTask,
     } = useTask();
     const { handleShowToast } = useToast();
 
@@ -47,71 +48,88 @@ function TaskItem({ taskData }: ITaskItemProps) {
     return (
         <div
             key={taskData?._id}
-            className="w-full border-b border-b-border-primary last:border-b-0 py-2"
+            className="w-full border-b border-b-border-primary last:border-b-0 py-2 flex flex-col gap-1"
         >
-            <div className="w-full flex items-start justify-start gap-2">
-                <div className="h-5">
-                    <button
-                        onClick={markCompleted}
-                        onMouseEnter={() => {
-                            setCheckBox(filledCheckBox);
-                        }}
-                        onMouseLeave={() => {
-                            setCheckBox(emptyCheckBox);
-                        }}
-                        className="hover:cursor-pointer pt-1 h-5"
-                    >
-                        <img
-                            src={
-                                taskData.isCompleted ? filledCheckBox : checkBox
-                            }
-                            alt="empty_circle.png"
-                            className="h-5 object-fit"
-                        />
-                    </button>
+            <div className="w-full flex flex-col">
+                <div className="w-full flex items-start justify-start gap-2">
+                    <div className="h-5">
+                        <button
+                            onClick={markCompleted}
+                            onMouseEnter={() => {
+                                setCheckBox(filledCheckBox);
+                            }}
+                            onMouseLeave={() => {
+                                setCheckBox(emptyCheckBox);
+                            }}
+                            className="hover:cursor-pointer pt-1 h-5"
+                        >
+                            <img
+                                src={
+                                    taskData.isCompleted
+                                        ? filledCheckBox
+                                        : checkBox
+                                }
+                                alt="empty_circle.png"
+                                className="h-5 object-fit"
+                            />
+                        </button>
+                    </div>
+                    <div className="w-full flex items-center justify-between">
+                        <div
+                            onClick={() => {
+                                handleSetSelectedTask(taskData as IUserTasks);
+                                handleDisplayEditForm(true, taskData._id);
+                            }}
+                            className="w-full cursor-pointer"
+                        >
+                            <h1
+                                className={`${taskData.isCompleted ? "text-text-grey line-through" : "text-text-dark"} text-sm font-regular`}
+                            >
+                                {taskData?.taskName}
+                            </h1>
+                            <p
+                                className={`${taskData.isCompleted ? "line-through" : ""} text-xs font-regular text-text-grey`}
+                            >
+                                {taskData?.taskNote}
+                            </p>
+                        </div>
+                        <div className="w-25 flex items-center justify-end pl-2 gap-3">
+                            <button
+                                onClick={() =>
+                                    handleDisplayEditForm(true, taskData._id)
+                                }
+                                className="hover:cursor-pointer"
+                            >
+                                <img src={editIcon} className="h-4 w-4" />
+                            </button>
+                            <button
+                                onClick={() =>
+                                    handleDisplayEditForm(true, taskData._id)
+                                }
+                                className="hover:cursor-pointer"
+                            >
+                                <img src={commentIcon} className="h-4 w-4" />
+                            </button>
+                            <button
+                                onClick={() => deleteTask(taskData._id)}
+                                className="hover:cursor-pointer"
+                            >
+                                <img src={deleteIcon} className="h-4 w-4" />
+                            </button>
+                        </div>
+                    </div>
                 </div>
-                <div className="w-full flex items-center justify-between">
-                    <div
-                        onClick={() => {
-                            handleDisplayEditForm(true, taskData._id);
-                        }}
-                        className="w-full cursor-pointer"
-                    >
-                        <h1
-                            className={`${taskData.isCompleted ? "text-text-grey line-through" : "text-text-dark"} text-sm font-regular`}
-                        >
-                            {taskData?.taskName}
-                        </h1>
-                        <p
-                            className={`${taskData.isCompleted ? "line-through" : ""} text-xs font-regular text-text-grey`}
-                        >
-                            {taskData?.taskNote}
-                        </p>
-                    </div>
-                    <div className="w-25 flex items-center justify-end pl-2 gap-3">
-                        <button
-                            onClick={() =>
-                                handleDisplayEditForm(true, taskData._id)
-                            }
-                            className="hover:cursor-pointer"
-                        >
-                            <img src={editIcon} className="h-4 w-4" />
-                        </button>
-                        <button
-                            onClick={() =>
-                                handleDisplayEditForm(true, taskData._id)
-                            }
-                            className="hover:cursor-pointer"
-                        >
-                            <img src={commentIcon} className="h-4 w-4" />
-                        </button>
-                        <button
-                            onClick={() => deleteTask(taskData._id)}
-                            className="hover:cursor-pointer"
-                        >
-                            <img src={deleteIcon} className="h-4 w-4" />
-                        </button>
-                    </div>
+            </div>
+
+            {/* labels */}
+            <div className="w-full">
+                <div className="flex items-center gap-2 pl-7">
+                    <span className="text-sm">0</span>
+                    <img
+                        src={commentIcon}
+                        alt="comment_icon.png"
+                        className="h-4"
+                    />
                 </div>
             </div>
         </div>

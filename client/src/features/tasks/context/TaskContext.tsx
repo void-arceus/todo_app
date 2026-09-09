@@ -1,3 +1,4 @@
+import { type ICommentData } from "../taskEditComponents/Comments";
 import {
     useContext,
     createContext,
@@ -19,6 +20,10 @@ export interface IUserTasks {
     taskPriority: string;
     isCompleted: boolean;
     isEdited: boolean;
+    taskComments: ICommentData[];
+    taskLabels: string[];
+    createdAt: Date;
+    updatedAt: Date;
 }
 
 interface ITaskContextInterface {

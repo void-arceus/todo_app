@@ -55,7 +55,7 @@ function TaskForm({ handleDisplayTaskForm }: ITaskFormProps) {
             onClick={() => {
                 handleDisplayTaskForm();
             }}
-            className="bg-black/20 h-screen w-full z-40 p-4 flex flex-col items-center absolute"
+            className="bg-black/20 h-screen w-full z-70 p-4 flex flex-col items-center absolute"
         >
             <div className="h-30" />
             <div

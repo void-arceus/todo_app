@@ -8,6 +8,7 @@ interface iTask {
     taskPriority: "low" | "medium" | "high";
     isEdited: boolean;
     userId: mongoose.Types.ObjectId;
+    taskLabels: string[];
     createdAt: Date;
     updatedAt: Date;
 }
@@ -42,6 +43,10 @@ const taskSchema = new Schema<iTask>(
             type: mongoose.Schema.Types.ObjectId,
             ref: "users",
             required: true,
+        },
+        taskLabels: {
+            type: [],
+            default: [],
         },
     },
     { timestamps: true },

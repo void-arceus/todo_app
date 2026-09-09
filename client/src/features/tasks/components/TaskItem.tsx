@@ -45,12 +45,47 @@ function TaskItem({ taskData }: ITaskItemProps) {
         handleSelectedTaskId(id);
     }
 
+    function formatDate(myDate: Date) {
+        const options = {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+            hour: "numeric",
+            minute: "numeric",
+        };
+        const customDate = new Date(myDate).toLocaleDateString(
+            "en-US",
+            options as any,
+        );
+        return customDate;
+    }
+
     return (
         <div
             key={taskData?._id}
             className="w-full border-b border-b-border-primary last:border-b-0 py-2 flex flex-col gap-1"
         >
             <div className="w-full flex flex-col">
+                <div className="w-full flex items-center gap-3">
+                    <div className="flex items-center gap-2">
+                        <p className="text-[12px] text-text-grey font-semibold">
+                            Created At:
+                        </p>
+                        <span className="text-[12px] font-medium text-text-grey">
+                            {formatDate(taskData?.createdAt)}
+                        </span>
+                    </div>
+                    {taskData?.isEdited ? (
+                        <div className="flex items-center gap-2">
+                            <p className="text-[12px] font-semibold text-text-grey">
+                                (Edited:
+                            </p>
+                            <span className="text-[12px] font-medium text-text-grey">
+                                {formatDate(taskData?.updatedAt)})
+                            </span>
+                        </div>
+                    ) : null}
+                </div>
                 <div className="w-full flex items-start justify-start gap-2">
                     <div className="h-5">
                         <button
@@ -127,11 +162,13 @@ function TaskItem({ taskData }: ITaskItemProps) {
             {/* labels */}
             <div className="w-full">
                 <div className="flex items-center gap-2 pl-7">
-                    <span className="text-sm">0</span>
+                    <span className="text-xs font-semibold text-text-grey">
+                        {taskData?.taskComments?.length}
+                    </span>
                     <img
                         src={commentIcon}
                         alt="comment_icon.png"
-                        className="h-4"
+                        className="h-3"
                     />
                 </div>
             </div>

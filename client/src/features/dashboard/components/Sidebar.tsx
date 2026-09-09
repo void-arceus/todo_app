@@ -60,7 +60,7 @@ function Sidebar({
     return (
         <main
             onClick={() => setUserMenu(false)}
-            className={`fixed top-0 left-0 z-40 h-screen w-full max-w-xs border-r border-border-primary bg-bg1-primary shadow-sm flex flex-col transform transition-transform duration-300 ease-in-out ${
+            className={`fixed top-0 left-0 z-40 bg-white h-screen w-full max-w-xs border-r border-border-primary bg-bg1-primary shadow-sm flex flex-col transform transition-transform duration-300 ease-in-out ${
                 isOpen
                     ? "translate-x-0 opacity-100"
                     : "opacity-50 -translate-x-full"
@@ -124,7 +124,7 @@ function Sidebar({
             <div className="w-full p-1.5">
                 <button
                     onClick={() => handleDisplayTaskForm()}
-                    className="w-full text-start text-xs font-semibold p-2 active:scale-[0.97] hover:bg-hover transition-scale duration-100 ease-in rounded-md flex items-center gap-1"
+                    className="w-full text-start text-xs font-semibold p-2 active:scale-[0.97] hover:bg-hover transition-scale duration-100 ease-in rounded-md flex items-center gap-2"
                 >
                     <img
                         src={addTaskIcon}

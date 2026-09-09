@@ -3,7 +3,7 @@ import TodayView from "../../tasks/components/TodayView";
 import UpcomingView from "../../tasks/components/UpcomingView";
 import FilterView from "../../tasks/components/FilterView";
 import ReportingsView from "../../tasks/components/ReportingsView";
-import TaskEditForm from "../../tasks/components/TaskEditForm";
+import TaskEditForm from "../../tasks/taskEditComponents/TaskEditForm";
 import { useTask } from "../../tasks/context/TaskContext";
 
 interface IMyTodoProps {

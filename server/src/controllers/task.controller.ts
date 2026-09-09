@@ -1,6 +1,6 @@
 import { type Request, type Response } from "express";
 import Tasks from "../models/task.model";
-import { ReturnDocument } from "mongodb";
+import { ObjectId } from "mongodb";
 
 export async function handleAddTask(req: Request, res: Response) {
     try {
@@ -35,7 +35,17 @@ export async function handleAddTask(req: Request, res: Response) {
 
 export async function handleGetTasks(req: Request, res: Response) {
     try {
-        const tasks = await Tasks.find({ userId: req.user?.id });
+        //const tasks = await Tasks.find({ userId: req.user?.id });
+        const tasks = await Tasks.aggregate([
+            {
+                $lookup: {
+                    from: "comments",
+                    localField: "_id",
+                    foreignField: "taskId",
+                    as: "taskComments",
+                },
+            },
+        ]);
         return res.status(200).json({
             status: true,
             message: "Tasks fetched successfully",
@@ -105,8 +115,6 @@ export async function handleUpdateTask(req: Request, res: Response) {
                 message: "Failed to Update Task",
             });
         }
-
-        console.log("Updated data:", updatedData);
 
         return res.status(200).json({
             status: true,

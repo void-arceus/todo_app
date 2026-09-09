@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import submitIcon from "../../../assets/icons/submit_icon.png";
-import { useTask } from "../context/TaskContext";
+import { useTask, type IUserTasks } from "../context/TaskContext";
 import {
     addComment,
     getComments,
@@ -13,7 +13,7 @@ import menuIcon from "../../../assets/icons/menu_dots.png";
 import editIcon from "../../../assets/icons/edit_icon.png";
 import deleteIcon from "../../../assets/icons/delete.png";
 
-interface ICommentData {
+export interface ICommentData {
     _id: string;
     message: string;
     userId: string;
@@ -23,7 +23,11 @@ interface ICommentData {
     updatedAt: Date;
 }
 
-function Comments() {
+interface CommentProps {
+    formatDate: (val: Date) => string;
+}
+
+function Comments({ formatDate }: CommentProps) {
     const [commentData, setCommentData] = useState<ICommentData[]>([]);
     const [selectedCommentId, setSelectedCommentId] = useState<string>("");
     const [commentMessage, setCommentMessage] = useState<string>("");
@@ -32,7 +36,7 @@ function Comments() {
     const [displayCommentEditor, setDisplayCommentEditor] =
         useState<boolean>(false);
     const [editedComment, setEditedComment] = useState<string>("");
-    const { selectedTaskId } = useTask();
+    const { selectedTaskId, selectedTask, handleSetSelectedTask } = useTask();
     const { handleShowToast } = useToast();
 
     useEffect(() => {
@@ -67,6 +71,11 @@ function Comments() {
             if (res?.status) {
                 setCommentMessage("");
                 setCommentData((prev) => [res?.data?.newComment, ...prev]);
+                const data = {
+                    ...selectedTask,
+                };
+                data.taskComments?.push(res?.data?.newComment);
+                handleSetSelectedTask(data as IUserTasks);
                 handleShowToast({
                     message: "Comment added successfully",
                     status: true,
@@ -140,21 +149,6 @@ function Comments() {
         } catch (error: any) {
             throw new Error(error);
         }
-    }
-
-    function formatDate(myDate: Date) {
-        const options = {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-            hour: "numeric",
-            minute: "numeric",
-        };
-        const customDate = new Date(myDate).toLocaleDateString(
-            "en-US",
-            options as any,
-        );
-        return customDate;
     }
 
     return (
@@ -280,7 +274,7 @@ function Comments() {
                                     </span>
                                 </div>
                             </div>
-                            <div className="w-10">
+                            <div className="w-10 flex items-center justify-end">
                                 <button
                                     onClick={() => {
                                         setSelectedCommentId(

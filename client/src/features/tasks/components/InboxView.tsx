@@ -22,7 +22,7 @@ function InboxView() {
         const data = {
             taskName: taskTitle,
             taskNote: taskDescription,
-            taskPriority: "low",
+            taskPriority: 3,
         };
         try {
             addNewTask(data as IUserTasks);

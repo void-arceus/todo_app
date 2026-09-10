@@ -66,7 +66,16 @@ function TaskItem({ taskData }: ITaskItemProps) {
             className="w-full border-b border-b-border-primary last:border-b-0 py-2 flex flex-col gap-1"
         >
             <div className="w-full flex flex-col">
-                <div className="w-full flex items-center gap-3">
+                <div className="w-full flex items-center gap-2">
+                    <span
+                        className={`${taskData?.taskPriority === 3 ? "text-green-600 bg-green-100" : taskData?.taskPriority === 2 ? "text-yellow-600 bg-yellow-100" : "text-red-600 bg-red-100"} capitalize text-[12px] font-semibold px-2 py-0.5 rounded-sm`}
+                    >
+                        {taskData?.taskPriority === 1
+                            ? "High"
+                            : taskData?.taskPriority === 2
+                              ? "Medium"
+                              : "Low"}
+                    </span>
                     <div className="flex items-center gap-2">
                         <p className="text-[12px] text-text-grey font-semibold">
                             Created At:

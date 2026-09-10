@@ -22,8 +22,8 @@ function TaskMetaData({ formatDate }: TaskMetaDataProps) {
         "Learning",
     ];
 
-    function handleTaskPriority(val: string) {
-        if (!val || val.trim() === "") return;
+    function handleTaskPriority(val: number) {
+        if (!val) return;
         try {
             const data = {
                 taskPriority: val,
@@ -183,13 +183,21 @@ function TaskMetaData({ formatDate }: TaskMetaDataProps) {
                 </div>
                 <div>
                     <select
-                        defaultValue="medium"
-                        onChange={(e) => handleTaskPriority(e.target.value)}
+                        defaultValue={selectedTask?.taskPriority}
+                        onChange={(e) =>
+                            handleTaskPriority(Number(e.target.value))
+                        }
                         className="text-xs border border-border-primary rounded-lg p-2 px-3"
                     >
-                        <option value="low">Low</option>
-                        <option value="medium">Medium</option>
-                        <option value="high">High</option>
+                        <option value={3} className="text-sm">
+                            Low
+                        </option>
+                        <option value={2} className="text-sm">
+                            Medium
+                        </option>
+                        <option value={1} className="text-sm">
+                            High
+                        </option>
                     </select>
                 </div>
             </div>

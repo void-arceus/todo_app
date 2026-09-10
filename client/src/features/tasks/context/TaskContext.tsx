@@ -17,7 +17,7 @@ export interface IUserTasks {
     _id: string;
     taskName: string;
     taskNote: string;
-    taskPriority: string;
+    taskPriority: number;
     isCompleted: boolean;
     isEdited: boolean;
     taskComments: ICommentData[];

@@ -35,7 +35,14 @@ export async function handleAddTask(req: Request, res: Response) {
 
 export async function handleGetTasks(req: Request, res: Response) {
     try {
-        //const tasks = await Tasks.find({ userId: req.user?.id });
+        const sortBy = (req.query.sortBy as string) || "createdAt";
+        const sortOrder =
+            req.query.sortOrder === "desc"
+                ? -1
+                : req.query.sortOrder === "asc"
+                  ? 1
+                  : -1;
+
         const tasks = await Tasks.aggregate([
             {
                 $lookup: {
@@ -45,7 +52,8 @@ export async function handleGetTasks(req: Request, res: Response) {
                     as: "taskComments",
                 },
             },
-        ]);
+        ]).sort({ [sortBy]: sortOrder });
+
         return res.status(200).json({
             status: true,
             message: "Tasks fetched successfully",

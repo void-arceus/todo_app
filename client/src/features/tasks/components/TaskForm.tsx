@@ -32,7 +32,7 @@ function TaskForm({ handleDisplayTaskForm }: ITaskFormProps) {
         const data = {
             taskName: taskTitle,
             taskNote: taskDescription,
-            taskPriority: "low",
+            taskPriority: 3,
         };
         try {
             addNewTask(data as IUserTasks);

@@ -134,9 +134,13 @@ function TaskDetail({ formatDate }: TaskDetailProps) {
                 <div className="w-full flex flex-col items-start border-b border-border-primary py-2 px-2">
                     <div className="px-6">
                         <span
-                            className={`${selectedTask?.taskPriority === "low" ? "text-green-600 bg-green-100" : selectedTask?.taskPriority === "medium" ? "text-yellow-600 bg-yellow-100" : "text-red-600 bg-red-100"} capitalize text-xs font-semibold px-3 py-1 rounded-sm`}
+                            className={`${selectedTask?.taskPriority === 3 ? "text-green-600 bg-green-100" : selectedTask?.taskPriority === 2 ? "text-yellow-600 bg-yellow-100" : "text-red-600 bg-red-100"} capitalize text-xs font-semibold px-3 py-1 rounded-sm`}
                         >
-                            {selectedTask?.taskPriority}
+                            {selectedTask?.taskPriority === 1
+                                ? "High"
+                                : selectedTask?.taskPriority === 2
+                                  ? "Medium"
+                                  : "Low"}
                         </span>
                     </div>
                     <div className="w-full flex items-start gap-2">

@@ -5,7 +5,7 @@ interface iTask {
     taskNote: string;
     isCompleted: boolean;
     deadline: Date;
-    taskPriority: "low" | "medium" | "high";
+    taskPriority: 1 | 2 | 3;
     isEdited: boolean;
     userId: mongoose.Types.ObjectId;
     taskLabels: string[];
@@ -32,9 +32,9 @@ const taskSchema = new Schema<iTask>(
             type: Date,
         },
         taskPriority: {
-            type: String,
-            enum: ["high", "medium", "low"],
-            default: "low",
+            type: Number,
+            enum: [1, 2, 3],
+            default: 3,
         },
         isEdited: {
             type: Boolean,

@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useTask } from "../context/TaskContext";
-import { handleUpdateTask } from "../services/tasks.service";
 import { useToast } from "../../../core/Toaster/Context/ToastContext";
 
 interface TaskMetaDataProps {
@@ -8,9 +7,10 @@ interface TaskMetaDataProps {
 }
 
 function TaskMetaData({ formatDate }: TaskMetaDataProps) {
-    const [addLabelForm, setAddLabelForm] = useState<boolean>(true);
+    const [addLabelForm, setAddLabelForm] = useState<boolean>(false);
     const [customTaskLabel, setCustomTaskLabel] = useState<string>("");
-    const { selectedTask, selectedTaskId } = useTask();
+    const { selectedTask, selectedTaskId, updateTask } = useTask();
+    const { handleShowToast } = useToast();
     const defaultLabels = [
         "Work",
         "Personal",
@@ -21,18 +21,51 @@ function TaskMetaData({ formatDate }: TaskMetaDataProps) {
         "Learning",
     ];
 
-    async function handleAddLabel(val?: string) {
+    function handleAddLabel(val?: string) {
+        if (!val && (!customTaskLabel || customTaskLabel.trim() === "")) {
+            handleShowToast({
+                message: "Lable cannot be empty!",
+                status: false,
+            });
+            return;
+        }
         try {
             let label: string[] = [];
             if (selectedTask && selectedTask?.taskLabels.length > 0) {
                 label = selectedTask?.taskLabels;
             }
-            label.push(customTaskLabel);
+
+            if (
+                (val && label.includes(val)) ||
+                label.includes(customTaskLabel)
+            ) {
+                handleShowToast({
+                    message: "Label already added!",
+                    status: false,
+                });
+                return;
+            }
+
+            if (val) {
+                label.push(val);
+            } else {
+                label.push(customTaskLabel);
+            }
             const data = {
                 taskLabels: label,
             };
-            const res = await handleUpdateTask(selectedTaskId, data);
+            updateTask(selectedTaskId, data);
+            setAddLabelForm(false);
+            setCustomTaskLabel("");
+            handleShowToast({
+                message: "Label added successfully!",
+                status: true,
+            });
         } catch (error: any) {
+            handleShowToast({
+                message: "Failed to add Label!",
+                status: false,
+            });
             throw new Error(error);
         }
     }
@@ -46,6 +79,8 @@ function TaskMetaData({ formatDate }: TaskMetaDataProps) {
                             Add Label:
                         </h1>
                         <input
+                            value={customTaskLabel}
+                            onChange={(e) => setCustomTaskLabel(e.target.value)}
                             placeholder="Label name"
                             className="text-xs text-text-grey w-full outline-0 border border-border-primary p-2 rounded-lg focus:border-border-hover"
                         />
@@ -56,7 +91,10 @@ function TaskMetaData({ formatDate }: TaskMetaDataProps) {
                             >
                                 cancel
                             </button>
-                            <button className="text-xs bg-button-primary hover:bg-button-hover text-text-light font-mdeium px-3 py-1.5 rounded-lg hover:cursor-pointer shadow-md active:scale-[0.96]">
+                            <button
+                                onClick={() => handleAddLabel()}
+                                className="text-xs bg-button-primary hover:bg-button-hover text-text-light font-mdeium px-3 py-1.5 rounded-lg hover:cursor-pointer shadow-md active:scale-[0.96]"
+                            >
                                 Add
                             </button>
                         </div>
@@ -106,27 +144,37 @@ function TaskMetaData({ formatDate }: TaskMetaDataProps) {
                 <div className="flex flex-col">
                     <div className="flex flex-col gap-2">
                         {selectedTask ? (
-                            selectedTask?.taskLabels?.length > 0 ? (
-                                selectedTask?.taskLabels.map((label, key) => (
-                                    <span key={key}>{label}</span>
-                                ))
-                            ) : (
-                                <p className="text-xs text-text-grey font-medium">
-                                    No Label Added
-                                </p>
-                            )
+                            <div className="w-full flex items-center gap-2 flex-wrap">
+                                {selectedTask?.taskLabels?.length > 0 ? (
+                                    selectedTask?.taskLabels.map(
+                                        (label, key) => (
+                                            <span
+                                                key={key}
+                                                className="w-fit text-xs text-text-grey font-medium px-3 py-1.5 border border-border-primary rounded-lg select-none hover:curosr-pointer hover:shadow-sm"
+                                            >
+                                                {label}
+                                            </span>
+                                        ),
+                                    )
+                                ) : (
+                                    <p className="text-xs text-text-grey font-medium">
+                                        No Label Added
+                                    </p>
+                                )}
+                            </div>
                         ) : null}
                         <h1 className="mt-2 text-xs font-semibold text-text-dark">
                             Add Labels:
                         </h1>
                         <div className="w-full flex items-center flex-wrap gap-2">
                             {defaultLabels.map((label, key) => (
-                                <span
+                                <button
+                                    onClick={() => handleAddLabel(label)}
                                     key={key}
                                     className="border border-border-primary rounded-lg px-3 py-1.5 text-xs text-text-grey font-medium hover:cursor-pointer hover:bg-hover bg-white hover:shadow-sm hover:text-text-dark select-none"
                                 >
                                     {label}
-                                </span>
+                                </button>
                             ))}
                             <button
                                 onClick={() => setAddLabelForm(true)}

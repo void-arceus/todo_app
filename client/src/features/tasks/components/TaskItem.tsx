@@ -159,8 +159,8 @@ function TaskItem({ taskData }: ITaskItemProps) {
                 </div>
             </div>
 
-            {/* labels */}
-            <div className="w-full">
+            {/* labels and comment count */}
+            <div className="w-full flex items-center gap-4">
                 <div className="flex items-center gap-2 pl-7">
                     <span className="text-xs font-semibold text-text-grey">
                         {taskData?.taskComments?.length}
@@ -171,6 +171,19 @@ function TaskItem({ taskData }: ITaskItemProps) {
                         className="h-3"
                     />
                 </div>
+
+                {taskData?.taskLabels ? (
+                    <div className="w-full overflow-hidden flex items-center gap-2">
+                        {taskData?.taskLabels.map((label, key) => (
+                            <span
+                                key={key}
+                                className="text-[12px] font-medium text-text-grey border border-border-primary px-1.5 py-0.5 rounded-md select-none hover:shadow-sm"
+                            >
+                                {label}
+                            </span>
+                        ))}
+                    </div>
+                ) : null}
             </div>
         </div>
     );

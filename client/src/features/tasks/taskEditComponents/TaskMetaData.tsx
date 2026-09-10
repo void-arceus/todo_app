@@ -1,3 +1,4 @@
+import crossIcon from "../../../assets/icons/close_icon.png";
 import { useState } from "react";
 import { useTask } from "../context/TaskContext";
 import { useToast } from "../../../core/Toaster/Context/ToastContext";
@@ -20,6 +21,26 @@ function TaskMetaData({ formatDate }: TaskMetaDataProps) {
         "Planning",
         "Learning",
     ];
+
+    function handleTaskPriority(val: string) {
+        if (!val || val.trim() === "") return;
+        try {
+            const data = {
+                taskPriority: val,
+            };
+            updateTask(selectedTaskId, data);
+            handleShowToast({
+                message: "Task Priority Updated!",
+                status: true,
+            });
+        } catch (error: any) {
+            handleShowToast({
+                message: "Failed to update task Priority!",
+                status: false,
+            });
+            throw new Error(error);
+        }
+    }
 
     function handleAddLabel(val?: string) {
         if (!val && (!customTaskLabel || customTaskLabel.trim() === "")) {
@@ -66,6 +87,34 @@ function TaskMetaData({ formatDate }: TaskMetaDataProps) {
                 message: "Failed to add Label!",
                 status: false,
             });
+            throw new Error(error);
+        }
+    }
+
+    async function handleRemoveLabel(val: string) {
+        try {
+            if (!val || val.trim() === "") {
+                handleShowToast({
+                    message: "Invalid Label Selected!",
+                    status: false,
+                });
+                return;
+            }
+            let label: string[] = [];
+            if (selectedTask) {
+                label = selectedTask?.taskLabels.filter(
+                    (label) => label !== val,
+                );
+            }
+            const data = {
+                taskLabels: label,
+            };
+            updateTask(selectedTaskId, data);
+            handleShowToast({
+                message: "Label Removed",
+                status: true,
+            });
+        } catch (error: any) {
             throw new Error(error);
         }
     }
@@ -126,14 +175,23 @@ function TaskMetaData({ formatDate }: TaskMetaDataProps) {
             </div>
 
             {/* priority */}
-
-            <div className="w-full p-2 py-4 flex flex-col gap-2 border-b border-border-primary">
-                <h1 className="text-xs font-semibold tex-text-dark">
-                    Priority
-                </h1>
-                <span className="w-fit text-xs px-4 py-1 border border-border-hover shadow-sm rounded-md select-none hover:cursor-pointer">
-                    Low
-                </span>
+            <div className="relative w-full p-2 py-4 flex flex-col gap-2 border-b border-border-primary">
+                <div className="flex items-center gap-2">
+                    <h1 className="text-xs font-semibold tex-text-dark">
+                        Priority
+                    </h1>
+                </div>
+                <div>
+                    <select
+                        defaultValue="medium"
+                        onChange={(e) => handleTaskPriority(e.target.value)}
+                        className="text-xs border border-border-primary rounded-lg p-2 px-3"
+                    >
+                        <option value="low">Low</option>
+                        <option value="medium">Medium</option>
+                        <option value="high">High</option>
+                    </select>
+                </div>
             </div>
 
             {/* labels */}
@@ -148,12 +206,24 @@ function TaskMetaData({ formatDate }: TaskMetaDataProps) {
                                 {selectedTask?.taskLabels?.length > 0 ? (
                                     selectedTask?.taskLabels.map(
                                         (label, key) => (
-                                            <span
+                                            <div
                                                 key={key}
-                                                className="w-fit text-xs text-text-grey font-medium px-3 py-1.5 border border-border-primary rounded-lg select-none hover:curosr-pointer hover:shadow-sm"
+                                                className="relative w-fit text-xs text-text-grey font-medium px-3 py-1.5 border border-border-primary rounded-lg select-none hover:curosr-pointer hover:shadow-sm"
                                             >
                                                 {label}
-                                            </span>
+                                                <button
+                                                    onClick={() =>
+                                                        handleRemoveLabel(label)
+                                                    }
+                                                    className="absolute -top-1 -right-1 border border-border-hover rounded-full bg-white p-0.5 hover:cursor-pointer"
+                                                >
+                                                    <img
+                                                        src={crossIcon}
+                                                        alt="cross_icon.png"
+                                                        className="h-1.5"
+                                                    />
+                                                </button>
+                                            </div>
                                         ),
                                     )
                                 ) : (

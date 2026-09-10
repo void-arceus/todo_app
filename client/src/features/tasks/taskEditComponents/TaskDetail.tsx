@@ -131,59 +131,68 @@ function TaskDetail({ formatDate }: TaskDetailProps) {
                     </div>
                 </div>
             ) : (
-                <div className="w-full flex items-start gap-2 border-b border-border-primary py-2 px-2">
-                    <button
-                        onClick={updateTaskStatus}
-                        onMouseEnter={() =>
-                            setActiveCircleIcon(emptyCicleActive)
-                        }
-                        onMouseLeave={() =>
-                            setActiveCircleIcon(emptyCircleIcon)
-                        }
-                        className="hover:cursor-pointer pt-1"
-                    >
-                        <img
-                            src={
-                                selectedTask?.isCompleted
-                                    ? emptyCicleActive
-                                    : activeCircleIcon
+                <div className="w-full flex flex-col items-start border-b border-border-primary py-2 px-2">
+                    <div className="px-6">
+                        <span
+                            className={`${selectedTask?.taskPriority === "low" ? "text-green-600 bg-green-100" : selectedTask?.taskPriority === "medium" ? "text-yellow-600 bg-yellow-100" : "text-red-600 bg-red-100"} capitalize text-xs font-semibold px-3 py-1 rounded-sm`}
+                        >
+                            {selectedTask?.taskPriority}
+                        </span>
+                    </div>
+                    <div className="w-full flex items-start gap-2">
+                        <button
+                            onClick={updateTaskStatus}
+                            onMouseEnter={() =>
+                                setActiveCircleIcon(emptyCicleActive)
                             }
-                            alt="empty_circle.png"
-                            className="h-4"
-                        />
-                    </button>
-                    <div className="w-full h-full flex items-start justify-between">
-                        <div className="flex flex-col w-full">
-                            <span
-                                className={`${selectedTask?.isCompleted ? "line-through text-text-grey" : ""} text-sm text-text-dark font-medium`}
-                            >
-                                {selectedTask?.taskName}
-                            </span>
-                            <span
-                                className={`${selectedTask?.isCompleted ? "line-through" : ""} text-xs font-medium text-text-grey`}
-                            >
-                                {selectedTask?.taskNote}
-                            </span>
-                        </div>
-                        <div className="h-full w-5 flex items-center justify-end">
-                            <button
-                                onClick={() => {
-                                    setSelectedTaskName(
-                                        selectedTask?.taskName as string,
-                                    );
-                                    setSelectedTaskNote(
-                                        selectedTask?.taskNote as string,
-                                    );
-                                    setIsTaskEditing(true);
-                                }}
-                                className="cursor:pointer active:scale-[0.96]"
-                            >
-                                <img
-                                    src={editIcon}
-                                    alt="edit_icon.png"
-                                    className="h-4 hover:cursor-pointer active:scale-[0.96]"
-                                />
-                            </button>
+                            onMouseLeave={() =>
+                                setActiveCircleIcon(emptyCircleIcon)
+                            }
+                            className="hover:cursor-pointer pt-1"
+                        >
+                            <img
+                                src={
+                                    selectedTask?.isCompleted
+                                        ? emptyCicleActive
+                                        : activeCircleIcon
+                                }
+                                alt="empty_circle.png"
+                                className="h-4"
+                            />
+                        </button>
+                        <div className="w-full h-full flex items-start justify-between">
+                            <div className="flex flex-col w-full">
+                                <span
+                                    className={`${selectedTask?.isCompleted ? "line-through text-text-grey" : ""} text-sm text-text-dark font-medium`}
+                                >
+                                    {selectedTask?.taskName}
+                                </span>
+                                <span
+                                    className={`${selectedTask?.isCompleted ? "line-through" : ""} text-xs font-medium text-text-grey`}
+                                >
+                                    {selectedTask?.taskNote}
+                                </span>
+                            </div>
+                            <div className="h-full w-5 flex items-center justify-end">
+                                <button
+                                    onClick={() => {
+                                        setSelectedTaskName(
+                                            selectedTask?.taskName as string,
+                                        );
+                                        setSelectedTaskNote(
+                                            selectedTask?.taskNote as string,
+                                        );
+                                        setIsTaskEditing(true);
+                                    }}
+                                    className="cursor:pointer active:scale-[0.96]"
+                                >
+                                    <img
+                                        src={editIcon}
+                                        alt="edit_icon.png"
+                                        className="h-4 hover:cursor-pointer active:scale-[0.96]"
+                                    />
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -34,6 +34,7 @@ const taskSchema = new Schema<iTask>(
         taskPriority: {
             type: String,
             enum: ["high", "medium", "low"],
+            default: "low",
         },
         isEdited: {
             type: Boolean,

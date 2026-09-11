@@ -43,6 +43,8 @@ export async function handleGetTasks(req: Request, res: Response) {
                   ? 1
                   : -1;
 
+        console.log("Sorting by:", sortBy, " ", sortOrder);
+
         const tasks = await Tasks.aggregate([
             {
                 $lookup: {

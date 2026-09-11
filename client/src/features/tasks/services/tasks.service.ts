@@ -12,9 +12,17 @@ export async function handleAddTask(data: ITaskInput) {
     }
 }
 
-export async function handleGetTasks() {
+export async function handleGetTasks(paramsData?: {
+    sortBy: string;
+    sortOrder: string;
+}) {
     try {
-        const res = await axios.get(`${BASE_URL}/v1/task/tasks`);
+        const res = await axios.get(`${BASE_URL}/v1/task/tasks`, {
+            params: {
+                sortBy: paramsData ? paramsData.sortBy : "createdAt",
+                sortOrder: paramsData ? paramsData.sortOrder : "desc",
+            },
+        });
         return res.data;
     } catch (error: any) {
         throw new Error(error);

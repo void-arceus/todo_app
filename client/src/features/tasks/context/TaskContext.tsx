@@ -31,7 +31,7 @@ interface ITaskContextInterface {
     deleteTask: (id: string) => void;
     updateTask: (id: string, data: Partial<IUserTasks>) => void;
     addNewTask: (data: IUserTasks) => void;
-    getTasks: () => void;
+    getTasks: (params?: { sortBy: string; sortOrder: string }) => void;
     taskLoading: boolean;
     showTaskEditForm: boolean;
     handleShowTaskEditForm: (val: boolean) => void;
@@ -127,10 +127,10 @@ export function TaskProvider({ children }: ITaskProviderProp) {
         }
     }
 
-    async function getTasks() {
+    async function getTasks(params?: { sortBy: string; sortOrder: string }) {
         try {
             setTaskLoading(true);
-            const res = await handleGetTasks();
+            const res = await handleGetTasks(params);
             setUserTasks(
                 res.data.sort(
                     (a: IUserTasks, b: IUserTasks) =>

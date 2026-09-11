@@ -1,7 +1,7 @@
 import crossIcon from "../../../assets/icons/close_icon.png";
 import { useState } from "react";
 import { useTask } from "../context/TaskContext";
-import { useToast } from "../../../core/Toaster/Context/ToastContext";
+import { useToast } from "../../../core/toaster/Context/ToastContext";
 
 interface TaskMetaDataProps {
     formatDate: (val: Date) => string;

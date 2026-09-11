@@ -3,7 +3,7 @@ import submitIcon from "../../../assets/icons/up_icon.png";
 import cancelIcon from "../../../assets/icons/close_icon.png";
 import { useTask, type IUserTasks } from "../context/TaskContext";
 import Loading from "../../../components/ui/Loading";
-import { useToast } from "../../../core/Toaster/Context/ToastContext";
+import { useToast } from "../../../core/toaster/Context/ToastContext";
 
 interface ITaskFormProps {
     handleDisplayTaskForm: () => void;

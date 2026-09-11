@@ -1,4 +1,4 @@
-import { useToast } from "../../core/Toaster/Context/ToastContext";
+import { useToast } from "../../core/toaster/Context/ToastContext";
 import closeIcon from "../../assets/icons/close_icon.png";
 import successIcon from "../../assets/icons/success_icon.png";
 import failedIcon from "../../assets/icons/failed_icon.png";

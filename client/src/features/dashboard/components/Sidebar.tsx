@@ -16,7 +16,7 @@ import { useAuth } from "../../../core/auth/context/AuthContext";
 import { useState } from "react";
 import { handleLogout } from "../../tasks/services/tasks.service";
 import { useNavigate } from "react-router-dom";
-import { useToast } from "../../../core/Toaster/Context/ToastContext";
+import { useToast } from "../../../core/toaster/Context/ToastContext";
 
 interface ISidebarProps {
     activeSideMenu: string;

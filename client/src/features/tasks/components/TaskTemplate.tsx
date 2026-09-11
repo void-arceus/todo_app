@@ -23,7 +23,6 @@ function TaskTemplate({ menuTitle }: ITemplateProps) {
                 sortBy: sortBy,
                 sortOrder: sortOrder,
             };
-            console.log("Sorting params:", params);
             getTasks(params);
         } catch (error: any) {
             throw new Error(error);

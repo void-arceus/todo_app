@@ -7,7 +7,7 @@ import {
     updateComment,
     deleteComment,
 } from "../services/comments.service";
-import { useToast } from "../../../core/Toaster/Context/ToastContext";
+import { useToast } from "../../../core/toaster/Context/ToastContext";
 import { type IPostCommentData } from "../services/comments.service";
 import menuIcon from "../../../assets/icons/menu_dots.png";
 import editIcon from "../../../assets/icons/edit_icon.png";

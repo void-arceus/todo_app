@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { handleLogin } from "../services/auth.service";
 import { useTask } from "../../../features/tasks/context/TaskContext";
 import Loading from "../../../components/ui/Loading";
-import { useToast } from "../../Toaster/Context/ToastContext";
+import { useToast } from "../../toaster/Context/ToastContext";
 
 const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 

@@ -4,9 +4,10 @@ import editIcon from "../../../assets/icons/edit_icon.png";
 import deleteIcon from "../../../assets/icons/delete.png";
 import commentIcon from "../../../assets/icons/comment.png";
 import { useTask } from "../context/TaskContext";
+import { useConfirmation } from "../../../core/confirmation/context/ConfirmationContext";
 import filledCheckBox from "../../../assets/icons/checkbox.png";
 import emptyCheckBox from "../../../assets/icons/unchecked.png";
-import { useToast } from "../../../core/Toaster/Context/ToastContext";
+import { useToast } from "../../../core/toaster/Context/ToastContext";
 
 interface ITaskItemProps {
     taskData: IUserTasks;
@@ -21,7 +22,16 @@ function TaskItem({ taskData }: ITaskItemProps) {
         handleSelectedTaskId,
         handleSetSelectedTask,
     } = useTask();
+    const { displayConfirmationBox } = useConfirmation();
     const { handleShowToast } = useToast();
+
+    function handleDeleteTask(id: string) {
+        const message =
+            "Are you sure you want to delete this task? This action cannot be undone.";
+        displayConfirmationBox(message, () => {
+            deleteTask(id);
+        });
+    }
 
     function markCompleted() {
         const data: Partial<IUserTasks> = {
@@ -158,7 +168,7 @@ function TaskItem({ taskData }: ITaskItemProps) {
                                 <img src={commentIcon} className="h-4 w-4" />
                             </button>
                             <button
-                                onClick={() => deleteTask(taskData._id)}
+                                onClick={() => handleDeleteTask(taskData._id)}
                                 className="hover:cursor-pointer"
                             >
                                 <img src={deleteIcon} className="h-4 w-4" />

@@ -1,6 +1,6 @@
 import TaskTemplate from "./TaskTemplate";
 import { useState } from "react";
-import { useToast } from "../../../core/Toaster/Context/ToastContext";
+import { useToast } from "../../../core/toaster/Context/ToastContext";
 import Loading from "../../../components/ui/Loading";
 import { useTask, type IUserTasks } from "../context/TaskContext";
 

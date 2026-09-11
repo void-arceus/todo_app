@@ -82,7 +82,6 @@ export function TaskProvider({ children }: ITaskProviderProp) {
         try {
             setTaskLoading(true);
             await handleDeleteTask(id);
-            alert("Task deleted successfully");
             setUserTasks((prev) => prev.filter((task) => task._id !== id));
         } catch (error: any) {
             setTaskLoading(false);

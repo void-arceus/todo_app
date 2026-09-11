@@ -4,7 +4,7 @@ import emptyCicleActive from "../../../assets/icons/empty_circle_hover.png";
 import editIcon from "../../../assets/icons/edit_icon.png";
 import emptyCircleIcon from "../../../assets/icons/empty_circle.png";
 import Loading from "../../../components/ui/Loading";
-import { useToast } from "../../../core/Toaster/Context/ToastContext";
+import { useToast } from "../../../core/toaster/Context/ToastContext";
 import { useTask } from "../context/TaskContext";
 import { handleUpdateTask } from "../services/tasks.service";
 
